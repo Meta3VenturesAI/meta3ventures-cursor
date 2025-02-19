@@ -1,0 +1,105 @@
+---
+interface Feature {
+  icon: string;
+  title: string;
+  description: string;
+  link?: string;
+}
+
+interface Props {
+  features: Feature[];
+  columns?: 2 | 3 | 4;
+  showLink?: boolean;
+  theme?: 'light' | 'dark';
+}
+
+const { 
+  features,
+  columns = 3,
+  showLink = true,
+  theme = 'dark'
+} = Astro.props;
+---
+
+<div class={`features-grid columns-${columns} theme-${theme}`}>
+  {features.map(feature => (
+    <div class="feature-card">
+      <div class="feature-icon">{feature.icon}</div>
+      <h3>{feature.title}</h3>
+      <p>{feature.description}</p>
+      {showLink && feature.link && (
+        <a href={feature.link} class="learn-more">Learn More →</a>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .features-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .columns-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+  .columns-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .columns-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .theme-light .feature-card h3 {
+    color: #1f2937;
+  }
+
+  .feature-card p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .theme-light .feature-card p {
+    color: #4b5563;
+  }
+
+  .learn-more {
+    color: #6366f1;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .learn-more:hover {
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

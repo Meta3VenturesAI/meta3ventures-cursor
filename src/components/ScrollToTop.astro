@@ -1,0 +1,72 @@
+---
+---
+<button id="scroll-to-top" class="scroll-button" aria-label="Scroll to top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+  </svg>
+</button>
+
+<script>
+  const scrollButton = document.getElementById('scroll-to-top');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollButton?.classList.add('visible');
+    } else {
+      scrollButton?.classList.remove('visible');
+    }
+  });
+
+  scrollButton?.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+
+<style>
+  .scroll-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #6366f1;
+    color: white;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .scroll-button.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scroll-button:hover {
+    transform: translateY(-2px);
+    background: #4f46e5;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .scroll-button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .scroll-button {
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }
+</style>

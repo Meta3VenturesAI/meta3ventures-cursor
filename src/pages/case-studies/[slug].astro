@@ -1,0 +1,207 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+
+const { slug } = Astro.params;
+
+// Mock case study data - in a real app, this would come from a database
+const caseStudies = {
+  'finance': {
+    title: '50% Faster Processing',
+    subtitle: 'How we helped a leading financial institution automate their document processing',
+    background: 'https://images.unsplash.com/photo-1677442136019-21780ecad995',
+    content: `
+      <h2>Challenge</h2>
+      <p>A leading financial institution was struggling with manual document processing, leading to delays and errors.</p>
+
+      <h2>Solution</h2>
+      <p>We implemented an AI-powered document processing system that could automatically extract, validate, and process information.</p>
+
+      <h2>Results</h2>
+      <ul>
+        <li>50% reduction in processing time</li>
+        <li>90% accuracy improvement</li>
+        <li>$2M annual cost savings</li>
+      </ul>
+    `
+  },
+  'healthcare': {
+    title: '90% Accuracy Improvement',
+    subtitle: 'Implementing AI diagnostics support for a healthcare provider',
+    background: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0',
+    content: `
+      <h2>Challenge</h2>
+      <p>A healthcare provider needed to improve their diagnostic accuracy while reducing the workload on medical staff.</p>
+
+      <h2>Solution</h2>
+      <p>We developed an AI-powered diagnostic support system that could analyze medical images and patient data.</p>
+
+      <h2>Results</h2>
+      <ul>
+        <li>90% improvement in diagnostic accuracy</li>
+        <li>30% reduction in diagnosis time</li>
+        <li>Improved patient outcomes</li>
+      </ul>
+    `
+  },
+  'manufacturing': {
+    title: '30% Cost Reduction',
+    subtitle: 'AI-powered predictive maintenance for manufacturing equipment',
+    background: 'https://images.unsplash.com/photo-1676401835893-ec90a38a286e',
+    content: `
+      <h2>Challenge</h2>
+      <p>A manufacturing company was experiencing frequent equipment failures leading to costly downtime.</p>
+
+      <h2>Solution</h2>
+      <p>We implemented an AI-powered predictive maintenance system that could forecast potential equipment failures.</p>
+
+      <h2>Results</h2>
+      <ul>
+        <li>30% reduction in maintenance costs</li>
+        <li>85% decrease in unplanned downtime</li>
+        <li>20% increase in equipment lifespan</li>
+      </ul>
+    `
+  }
+};
+
+const caseStudy = caseStudies[slug];
+
+if (!caseStudy) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title={`${caseStudy.title} - Case Study | GenovateAI`}>
+  <main>
+    <PageHero
+      title={caseStudy.title}
+      subtitle={caseStudy.subtitle}
+      background={caseStudy.background}
+      pattern="grid"
+    />
+
+    <section class="case-study-section">
+      <div class="section-content">
+        <div class="case-study-content" set:html={caseStudy.content} />
+        
+        <div class="cta-section">
+          <h2>Ready to Transform Your Business?</h2>
+          <p>Let's discuss how we can help you achieve similar results</p>
+          <div class="cta-buttons">
+            <a href="/contact" class="primary-button">Schedule a Demo</a>
+            <a href="/case-studies" class="secondary-button">View More Case Studies</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .case-study-section {
+    padding: 4rem 0;
+  }
+
+  .section-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .case-study-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 4rem;
+  }
+
+  .case-study-content h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .case-study-content h2:first-child {
+    margin-top: 0;
+  }
+
+  .case-study-content p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .case-study-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .case-study-content li {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .case-study-content li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: #6366f1;
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 0 1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+  }
+</style>

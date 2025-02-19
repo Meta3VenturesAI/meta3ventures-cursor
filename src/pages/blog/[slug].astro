@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+const { slug } = Astro.params;
+
+// Default post content if Supabase is not configured
+const defaultPost = {
+  title: "The Future of AI in Business",
+  content: `
+    <h2>Introduction</h2>
+    <p>AI is transforming how businesses operate and make decisions...</p>
+    
+    <h2>Key Trends</h2>
+    <p>Several key trends are shaping the future of AI in business...</p>
+    
+    <h2>Implementation Strategies</h2>
+    <p>To successfully implement AI in your business...</p>
+  `,
+  image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+  published_at: new Date().toISOString()
+};
+
+let post = defaultPost;
+
+if (isSupabaseConfigured() && slug) {
+  try {
+    const { data } = await supabase!
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+    
+    if (data) {
+      post = data;
+    }
+  } catch (e) {
+    console.error('Error fetching post:', e);
+  }
+}
+---
+
+<BaseLayout title={`${post.title} - Meta3Ventures Blog`}>
+  <article class="post">
+    {post.image && (
+      <div class="post-hero" style={`background-image: url(${post.image})`}>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>{post.title}</h1>
+          {post.published_at && (
+            <time datetime={post.published_at}>
+              {new Date(post.published_at).toLocaleDateString()}
+            </time>
+          )}
+        </div>
+      </div>
+    )}
+    
+    <div class="post-content" set:html={post.content} />
+  </article>
+</BaseLayout>
+
+<style>
+  .post-hero {
+    height: 50vh;
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 11, 30, 0.7);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  time {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .post-content {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  .post-content :global(h2) {
+    font-size: 2rem;
+    color: var(--text);
+    margin: 2rem 0 1rem;
+  }
+
+  .post-content :global(p) {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .post-hero {
+      height: 40vh;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .post-content {
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+  }
+</style>

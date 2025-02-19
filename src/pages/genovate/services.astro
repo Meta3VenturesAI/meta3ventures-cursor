@@ -1,0 +1,265 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+
+const aiConsultancy = [
+  {
+    title: "AI Strategic Consultancy",
+    description: "Elevate your business with our tailored AI consultancy services. We specialize in integrating AI technology to enhance operations, drive innovation, and accelerate growth, ensuring your business thrives in the digital era",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995"
+  },
+  {
+    title: "Generative AI Development",
+    description: "Embark on a journey into the world of AI with our customized solutions. From assessing AI readiness to integrating it into your workflows, we make cutting-edge AI technology accessible and impactful for your business",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0"
+  },
+  {
+    title: "'Chief Data and Analytics Officer' (CDAO) as a Service",
+    description: "Amplify your strategic capabilities with our CDAO service. Our seasoned professionals provide in-depth data and analytics strategies, empowering you to achieve and surpass your business objectives",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+  },
+  {
+    title: "AI Training and Workshops",
+    description: "Stay ahead of the technological curve with our comprehensive training programs. Equip your team with the skills to leverage AI technologies effectively, fostering a culture of innovation",
+    image: "https://images.unsplash.com/photo-1642104704074-907c0698cbd9"
+  }
+];
+
+const automationServices = [
+  {
+    title: "Intelligent Data Management",
+    description: "Revolutionize your data handling with our automation services, enabling swift data collection, analysis, and entry. Free your team to focus on generating strategic insights and making informed decisions",
+    image: "https://images.unsplash.com/photo-1678382159568-41c2dbc7d8c6"
+  },
+  {
+    title: "Customer Service Automation",
+    description: "From personalized interactions to efficient ticketing processes, AI-driven customer service automation ensures that every client receives the attention they deserve while gathering actionable service insights",
+    image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2"
+  },
+  {
+    title: "Digital Marketing Intelligence Automation",
+    description: "Reimagine your digital marketing strategies with AI-powered automation. Enhance campaign design, execution, and optimization for a data-driven approach that significantly boosts marketing ROI",
+    image: "https://images.unsplash.com/photo-1642104704074-907c0698cbd9"
+  }
+];
+
+const aiTools = [
+  {
+    title: "Virtual Assistant (AI Chatbot)",
+    description: "Revolutionize customer engagement with our AI-powered virtual assistant. Utilizing NLP and machine learning, it delivers real-time, personalized interactions, enhancing customer satisfaction and operational efficiency",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+    hasDemo: true
+  },
+  {
+    title: "Brand Tailored Assets Generator",
+    description: "Leverage generative AI to produce customized marketing content that resonates with your brand identity. Accelerate content creation while maintaining consistency and engaging your target audience effectively",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0",
+    hasDemo: true
+  },
+  {
+    title: "Data and Social Channel Insights Tool",
+    description: "Unlock valuable insights and drive growth with our sophisticated analytics tool. Analyze social media interactions and internal data to refine your marketing strategies, product development, and customer engagement",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e",
+    hasDemo: true
+  }
+];
+---
+
+<GenovateLayout title="Services - GenovateAI">
+  <PageHero
+    title="Our Services"
+    subtitle="Comprehensive AI Solutions for Your Business"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <main>
+    <section class="services-section">
+      <h2>AI Consultancy and Development</h2>
+      <div class="services-grid">
+        {aiConsultancy.map(service => (
+          <div class="service-card">
+            <div class="service-image" style={`background-image: url(${service.image})`}></div>
+            <div class="service-content">
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="services-section">
+      <h2>Tailored Automation Services</h2>
+      <div class="services-grid">
+        {automationServices.map(service => (
+          <div class="service-card">
+            <div class="service-image" style={`background-image: url(${service.image})`}></div>
+            <div class="service-content">
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="services-section">
+      <h2>Exclusive Gen AI Tools</h2>
+      <div class="services-grid">
+        {aiTools.map(tool => (
+          <div class="service-card">
+            <div class="service-image" style={`background-image: url(${tool.image})`}></div>
+            <div class="service-content">
+              <h3>{tool.title}</h3>
+              <p>{tool.description}</p>
+              {tool.hasDemo && (
+                <a href="/schedule-demo" class="try-button">Try it</a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <h2>Partner with GenovateAI</h2>
+      <p>Embrace the future with GenovateAI as your guide. Our advanced AI solutions are designed to transform your business operations, ensuring you lead in innovation and efficiency.</p>
+      <p>Explore how GenovateAI can redefine your business landscape. Contact us today to delve into our services and start your journey towards transformation and growth with AI.</p>
+      <a href="/schedule-demo" class="cta-button">Partner with Us</a>
+    </section>
+  </main>
+</GenovateLayout>
+
+<style>
+  .services-section {
+    padding: 6rem 2rem;
+  }
+
+  .services-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 3rem;
+  }
+
+  .services-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .service-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .service-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .service-content {
+    padding: 2rem;
+  }
+
+  .service-content h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .try-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .try-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .cta-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-section p {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .services-section {
+      padding: 4rem 1rem;
+    }
+
+    .services-section h2 {
+      font-size: 2rem;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+      padding: 4rem 1rem;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+    }
+  }
+</style>

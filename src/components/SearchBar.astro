@@ -1,0 +1,75 @@
+---
+interface Props {
+  placeholder?: string;
+  value?: string;
+}
+
+const { 
+  placeholder = "Search...",
+  value = ""
+} = Astro.props;
+---
+
+<div class="search-container">
+  <input 
+    type="search" 
+    class="search-input"
+    placeholder={placeholder}
+    value={value}
+  >
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+</div>
+
+<style>
+  .search-container {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-muted);
+    stroke-width: 2;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+let debounceTimeout: number;
+
+const searchInput = document.querySelector('.search-input');
+searchInput?.addEventListener('input', (e) => {
+  clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('search', (e.target as HTMLInputElement).value);
+    window.location.search = searchParams.toString();
+  }, 500);
+});
+</script>

@@ -1,0 +1,340 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Meta3Ventures - AI & Web3 Venture Studio" isMeta3={true}>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Meta3<span class="gradient-text">Ventures</span></h1>
+        <p class="hero-subtitle">Building the Future of AI, Web3, and Robotics</p>
+        <div class="hero-description">
+          <p>A next-generation venture studio and investment firm dedicated to partnering with visionary founders and actively building companies that shape the future of technology.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="investment-thesis">
+      <div class="section-content">
+        <h2 class="section-title">Investment Thesis</h2>
+        <div class="thesis-grid">
+          <div class="thesis-card">
+            <div class="card-icon">🤖</div>
+            <h3>Generative AI</h3>
+            <p>Investing in next-generation AI models and applications that create, augment, and transform industries through innovative approaches to content and data generation.</p>
+          </div>
+          <div class="thesis-card">
+            <div class="card-icon">⚡</div>
+            <h3>Agentic AI Automation</h3>
+            <p>Supporting autonomous AI systems that can understand, decide, and act independently, revolutionizing business processes and decision-making.</p>
+          </div>
+          <div class="thesis-card">
+            <div class="card-icon">🌐</div>
+            <h3>Web3 & Blockchain</h3>
+            <p>Backing decentralized technologies that are reshaping the future of the internet, digital ownership, and financial systems.</p>
+          </div>
+          <div class="thesis-card">
+            <div class="card-icon">🦾</div>
+            <h3>Robotics</h3>
+            <p>Developing innovative robotics solutions that combine AI with physical automation to transform manufacturing, logistics, and service industries.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="value-proposition">
+      <div class="section-content">
+        <h2 class="section-title">How We Help Founders Succeed</h2>
+        <div class="value-grid">
+          <div class="value-card">
+            <h3>Active Company Building</h3>
+            <p>We don't just invest - we actively work alongside founders to build and scale successful ventures, providing hands-on support at every stage.</p>
+          </div>
+          <div class="value-card">
+            <h3>Technical Expertise</h3>
+            <p>Access our team of AI researchers, blockchain developers, and robotics engineers to accelerate your product development.</p>
+          </div>
+          <div class="value-card">
+            <h3>Strategic Network</h3>
+            <p>Leverage our extensive network of industry leaders, technology partners, and potential customers to drive growth.</p>
+          </div>
+          <div class="value-card">
+            <h3>Operational Support</h3>
+            <p>Get comprehensive support in areas like product strategy, go-to-market execution, and talent acquisition.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="partnership">
+      <div class="section-content">
+        <div class="partnership-container">
+          <div class="partnership-content">
+            <h2>Strategic Partnership with GenovateAI</h2>
+            <p>Through our partnership with GenovateAI, portfolio companies gain access to cutting-edge AI development resources, industry expertise, and a proven track record in AI implementation.</p>
+            <div class="partnership-benefits">
+              <div class="benefit">
+                <span class="benefit-icon">🔬</span>
+                <span>Access to AI Research Lab</span>
+              </div>
+              <div class="benefit">
+                <span class="benefit-icon">👥</span>
+                <span>Expert AI Development Team</span>
+              </div>
+              <div class="benefit">
+                <span class="benefit-icon">🚀</span>
+                <span>Rapid Prototyping & MVP Development</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="section-content">
+        <h2>Ready to Build the Future?</h2>
+        <p>Join our portfolio of innovative companies shaping the future of technology</p>
+        <div class="cta-buttons">
+          <a href="/apply" class="primary-button">Apply for Funding</a>
+          <a href="/contact" class="secondary-button">Schedule a Meeting</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* Reusing GenovateAI's base styles */
+  main {
+    margin-top: 0;
+  }
+
+  .hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(10, 11, 30, 0.8), rgba(10, 11, 30, 0.8)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .gradient-text {
+    background: linear-gradient(45deg, #6366f1, #8b5cf6, #d946ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-description {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 3rem;
+  }
+
+  .thesis-grid, .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .thesis-card, .value-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .thesis-card:hover, .value-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .thesis-card h3, .value-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .thesis-card p, .value-card p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+  }
+
+  .partnership {
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+  }
+
+  .partnership-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .partnership-content h2 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .partnership-content p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .partnership-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .benefit {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+  }
+
+  .benefit-icon {
+    font-size: 1.5rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1677442136019-21780ecad995') center/cover;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .primary-button, .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: #6366f1;
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 3rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .partnership-container {
+      padding: 2rem;
+    }
+  }
+</style>

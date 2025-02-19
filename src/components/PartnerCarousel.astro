@@ -1,0 +1,375 @@
+---
+interface Props {
+  partners: {
+    name: string;
+    logo: string;
+  }[];
+}
+
+const { partners } = Astro.props;
+---
+
+<section class="partners-section">
+  <div class="section-content">
+    <h2 class="section-title">Trusted By Industry Leaders</h2>
+    <p class="section-subtitle">Partnering with leading organizations to drive AI innovation</p>
+    
+    <div class="carousel-container">
+      <button class="carousel-button prev" aria-label="Previous partners">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+
+      <div class="carousel-track-container">
+        <div class="carousel-track">
+          {[...partners, ...partners].map((partner, index) => (
+            <div class="partner-logo" data-index={index}>
+              <img src={partner.logo} alt={partner.name} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button class="carousel-button next" aria-label="Next partners">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="carousel-dots"></div>
+  </div>
+</section>
+
+<style>
+  .partners-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.98), rgba(10, 11, 30, 0.98)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+    overflow: hidden;
+  }
+
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 -2rem;
+  }
+
+  .carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 3rem;
+    transition: transform 0.5s ease-out;
+    will-change: transform;
+  }
+
+  .partner-logo {
+    flex: 0 0 200px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .partner-logo:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
+  .partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(1) brightness(2);
+    transition: all 0.3s ease;
+  }
+
+  .partner-logo:hover img {
+    filter: grayscale(0) brightness(1);
+  }
+
+  .carousel-button {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  .carousel-button:hover {
+    background: rgba(99, 102, 241, 0.3);
+    transform: scale(1.1);
+  }
+
+  .carousel-button svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+  }
+
+  .carousel-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .carousel-dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .carousel-dot.active {
+    background: var(--accent);
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .carousel-container {
+      margin: 0 -1rem;
+    }
+
+    .partner-logo {
+      flex: 0 0 150px;
+      height: 60px;
+    }
+
+    .carousel-button {
+      width: 32px;
+      height: 32px;
+    }
+
+    .carousel-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+
+<script>
+class Carousel {
+  private container: HTMLElement;
+  private track: HTMLElement;
+  private items: HTMLElement[];
+  private dots: HTMLElement;
+  private prevBtn: HTMLButtonElement;
+  private nextBtn: HTMLButtonElement;
+  
+  private currentIndex: number = 0;
+  private itemWidth: number = 0;
+  private itemsPerView: number = 0;
+  private totalSlides: number = 0;
+  private autoplayInterval: number | null = null;
+  private isDragging: boolean = false;
+  private startX: number = 0;
+  private scrollLeft: number = 0;
+
+  constructor(element: HTMLElement) {
+    this.container = element;
+    this.track = element.querySelector('.carousel-track')!;
+    this.items = Array.from(element.querySelectorAll('.partner-logo'));
+    this.dots = element.querySelector('.carousel-dots')!;
+    this.prevBtn = element.querySelector('.prev')!;
+    this.nextBtn = element.querySelector('.next')!;
+    
+    this.init();
+  }
+
+  init() {
+    this.updateDimensions();
+    this.createDots();
+    this.addEventListeners();
+    this.startAutoplay();
+    this.updateButtons();
+    this.updateDots();
+  }
+
+  updateDimensions() {
+    const containerWidth = this.container.offsetWidth;
+    this.itemWidth = this.items[0].offsetWidth + 48; // Including gap
+    this.itemsPerView = Math.floor(containerWidth / this.itemWidth);
+    this.totalSlides = Math.ceil(this.items.length / this.itemsPerView);
+  }
+
+  createDots() {
+    for (let i = 0; i < this.totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => this.goToSlide(i));
+      this.dots.appendChild(dot);
+    }
+  }
+
+  updateDots() {
+    const dots = this.dots.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === this.currentIndex);
+    });
+  }
+
+  updateButtons() {
+    this.prevBtn.disabled = this.currentIndex === 0;
+    this.nextBtn.disabled = this.currentIndex === this.totalSlides - 1;
+  }
+
+  goToSlide(index: number) {
+    this.currentIndex = Math.max(0, Math.min(index, this.totalSlides - 1));
+    const offset = -this.currentIndex * (this.itemWidth * this.itemsPerView);
+    this.track.style.transform = `translateX(${offset}px)`;
+    this.updateDots();
+    this.updateButtons();
+  }
+
+  startAutoplay() {
+    this.autoplayInterval = window.setInterval(() => {
+      if (this.currentIndex === this.totalSlides - 1) {
+        this.goToSlide(0);
+      } else {
+        this.goToSlide(this.currentIndex + 1);
+      }
+    }, 5000);
+  }
+
+  stopAutoplay() {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+      this.autoplayInterval = null;
+    }
+  }
+
+  addEventListeners() {
+    // Navigation buttons
+    this.prevBtn.addEventListener('click', () => {
+      this.stopAutoplay();
+      this.goToSlide(this.currentIndex - 1);
+    });
+
+    this.nextBtn.addEventListener('click', () => {
+      this.stopAutoplay();
+      this.goToSlide(this.currentIndex + 1);
+    });
+
+    // Mouse drag
+    this.track.addEventListener('mousedown', (e) => {
+      this.isDragging = true;
+      this.startX = e.pageX - this.track.offsetLeft;
+      this.scrollLeft = this.currentIndex * this.itemWidth * this.itemsPerView;
+      this.stopAutoplay();
+    });
+
+    this.track.addEventListener('mousemove', (e) => {
+      if (!this.isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - this.track.offsetLeft;
+      const walk = (x - this.startX) * 2;
+      const offset = -this.scrollLeft + walk;
+      this.track.style.transform = `translateX(${offset}px)`;
+    });
+
+    this.track.addEventListener('mouseup', () => this.endDrag());
+    this.track.addEventListener('mouseleave', () => this.endDrag());
+
+    // Touch events
+    this.track.addEventListener('touchstart', (e) => {
+      this.isDragging = true;
+      this.startX = e.touches[0].pageX - this.track.offsetLeft;
+      this.scrollLeft = this.currentIndex * this.itemWidth * this.itemsPerView;
+      this.stopAutoplay();
+    });
+
+    this.track.addEventListener('touchmove', (e) => {
+      if (!this.isDragging) return;
+      const x = e.touches[0].pageX - this.track.offsetLeft;
+      const walk = (x - this.startX) * 2;
+      const offset = -this.scrollLeft + walk;
+      this.track.style.transform = `translateX(${offset}px)`;
+    });
+
+    this.track.addEventListener('touchend', () => this.endDrag());
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      this.updateDimensions();
+      this.goToSlide(this.currentIndex);
+    });
+
+    // Pause autoplay on hover
+    this.container.addEventListener('mouseenter', () => this.stopAutoplay());
+    this.container.addEventListener('mouseleave', () => this.startAutoplay());
+  }
+
+  endDrag() {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    const trackRect = this.track.getBoundingClientRect();
+    const offset = -trackRect.left;
+    const slideIndex = Math.round(offset / (this.itemWidth * this.itemsPerView));
+    this.goToSlide(slideIndex);
+  }
+}
+
+// Initialize carousels
+document.querySelectorAll('.carousel-container').forEach(carousel => {
+  new Carousel(carousel as HTMLElement);
+});
+</script>

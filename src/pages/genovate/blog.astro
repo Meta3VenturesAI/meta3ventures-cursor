@@ -1,0 +1,365 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LoadingSpinner from '../../components/LoadingSpinner.astro';
+import NewsletterCTA from '../../components/NewsletterCTA.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+// Default blog posts for GenovateAI
+const defaultPosts = [
+  {
+    title: "Implementing AI in Your Business",
+    excerpt: "A practical guide to successfully implementing AI solutions in your organization.",
+    slug: "implementing-ai-business",
+    published_at: new Date().toISOString(),
+    categories: ["Implementation", "Guide"],
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995"
+  },
+  {
+    title: "AI Automation Best Practices",
+    excerpt: "Learn the best practices for implementing AI automation in your workflow.",
+    slug: "ai-automation-best-practices",
+    published_at: new Date().toISOString(),
+    categories: ["Automation", "Best Practices"],
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0"
+  },
+  {
+    title: "Data Strategy for AI Success",
+    excerpt: "How to develop a robust data strategy for successful AI implementation.",
+    slug: "data-strategy-ai-success",
+    published_at: new Date().toISOString(),
+    categories: ["Data", "Strategy"],
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+  }
+];
+
+// Get query parameters for filtering
+const { searchParams } = Astro.url;
+const category = searchParams.get('category');
+const search = searchParams.get('search');
+
+let blogPosts = defaultPosts;
+let categories = new Set(['Implementation', 'Guide', 'Automation', 'Best Practices', 'Data', 'Strategy']);
+let isLoading = true;
+
+if (isSupabaseConfigured()) {
+  try {
+    let query = supabase!
+      .from('genovate_blog_posts')
+      .select('*')
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString())
+      .order('published_at', { ascending: false });
+    
+    if (category) {
+      query = query.contains('categories', [category]);
+    }
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`);
+    }
+    
+    const { data } = await query;
+    
+    if (data && data.length > 0) {
+      blogPosts = data;
+      data.forEach(post => {
+        if (post.categories) {
+          post.categories.forEach(cat => categories.add(cat));
+        }
+      });
+    }
+  } catch (e) {
+    console.error('Error:', e);
+  }
+}
+
+isLoading = false;
+---
+
+<GenovateLayout title="Blog - GenovateAI">
+  <main>
+    <PageHero
+      title="AI Implementation Insights"
+      subtitle="Expert guidance and best practices for implementing AI solutions"
+      background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+      pattern="grid"
+      height="50vh"
+    />
+
+    <section class="blog-section">
+      <div class="section-content">
+        <div class="filters">
+          <div class="search-box">
+            <input 
+              type="search" 
+              id="search" 
+              placeholder="Search articles..." 
+              value={search || ''}
+            >
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+
+          <div class="categories-filter">
+            <button class="category-btn active" data-category="all">All</button>
+            {[...categories].map(cat => (
+              <button 
+                class="category-btn" 
+                data-category={cat}
+                class:list={[{ active: cat === category }]}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div class="posts-grid">
+            {blogPosts.map(post => (
+              <article class="post-card">
+                <a href={`/blog/${post.slug}`} class="post-link">
+                  <div class="post-image" style={`background-image: url(${post.image})`}>
+                    {post.categories?.[0] && (
+                      <span class="category-tag">{post.categories[0]}</span>
+                    )}
+                  </div>
+                  <div class="post-content">
+                    <h2>{post.title}</h2>
+                    <p class="excerpt">{post.excerpt}</p>
+                    <div class="post-meta">
+                      <time datetime={post.published_at}>
+                        {new Date(post.published_at).toLocaleDateString()}
+                      </time>
+                      <span class="read-more">Read More →</span>
+                    </div>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <NewsletterCTA
+      title="Get AI Implementation Tips"
+      subtitle="Subscribe to our newsletter for practical insights and best practices"
+      buttonText="Subscribe Now"
+      pattern="grid"
+    />
+  </main>
+</GenovateLayout>
+
+<style>
+  /* Use same styles as Meta3Ventures blog */
+  .blog-section {
+    padding: 4rem 0;
+  }
+
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .filters {
+    margin-bottom: 3rem;
+  }
+
+  .search-box {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1.5rem;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-width: 2;
+  }
+
+  .categories-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .category-btn {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .category-btn:hover,
+  .category-btn.active {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .post-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+  }
+
+  .post-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .post-link {
+    text-decoration: none;
+    color: white;
+  }
+
+  .post-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .category-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(99, 102, 241, 0.9);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    backdrop-filter: blur(5px);
+  }
+
+  .post-content {
+    padding: 1.5rem;
+  }
+
+  .post-content h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    color: white;
+    line-height: 1.3;
+  }
+
+  .excerpt {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+  }
+
+  .read-more {
+    color: #6366f1;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section-content {
+      padding: 0 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Use same script as Meta3Ventures blog
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search');
+    const categoryBtns = document.querySelectorAll('.category-btn');
+
+    function updateFilters(searchValue, categoryValue) {
+      const params = new URLSearchParams(window.location.search);
+      
+      if (searchValue) {
+        params.set('search', searchValue);
+      } else {
+        params.delete('search');
+      }
+      
+      if (categoryValue && categoryValue !== 'all') {
+        params.set('category', categoryValue);
+      } else {
+        params.delete('category');
+      }
+      
+      window.location.search = params.toString();
+    }
+
+    let debounceTimeout;
+    searchInput?.addEventListener('input', (e) => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        updateFilters(e.target.value, new URLSearchParams(window.location.search).get('category'));
+      }, 500);
+    });
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateFilters(searchInput?.value || '', btn.dataset.category);
+      });
+    });
+  });
+</script>

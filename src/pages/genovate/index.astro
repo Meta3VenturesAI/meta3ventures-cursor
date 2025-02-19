@@ -1,0 +1,236 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServicesGrid from '../../components/ServicesGrid.astro';
+import PartnerCarousel from '../../components/PartnerCarousel.astro';
+import NewsletterCTA from '../../components/NewsletterCTA.astro';
+
+const services = [
+  {
+    icon: "🤖",
+    title: "AI Implementation",
+    description: "Expert implementation of AI solutions across various business processes",
+    features: [
+      "Custom Solutions",
+      "Integration Support",
+      "Performance Optimization",
+      "Ongoing Maintenance"
+    ]
+  },
+  {
+    icon: "⚡",
+    title: "Process Automation",
+    description: "End-to-end automation solutions powered by advanced AI",
+    features: [
+      "Workflow Analysis",
+      "Custom Automation",
+      "System Integration",
+      "Performance Tracking"
+    ]
+  },
+  {
+    icon: "📊",
+    title: "Data Intelligence",
+    description: "Transform your data into actionable insights with AI-powered analytics",
+    features: [
+      "Data Strategy",
+      "Analytics Implementation",
+      "Predictive Modeling",
+      "Real-time Monitoring"
+    ]
+  },
+  {
+    icon: "🛠️",
+    title: "AI Tools & Agents",
+    description: "Custom AI solutions tailored to your specific needs",
+    features: [
+      "Custom AI Agents",
+      "Tool Development",
+      "API Integration",
+      "Maintenance & Support"
+    ]
+  }
+];
+
+const partners = [
+  {
+    name: "Microsoft",
+    logo: "/partners/microsoft.svg"
+  },
+  {
+    name: "IBM",
+    logo: "/partners/ibm.svg"
+  },
+  {
+    name: "Oracle",
+    logo: "/partners/oracle.svg"
+  },
+  {
+    name: "SAP",
+    logo: "/partners/sap.svg"
+  },
+  {
+    name: "Salesforce",
+    logo: "/partners/salesforce.svg"
+  },
+  {
+    name: "AWS",
+    logo: "/partners/aws.svg"
+  }
+];
+---
+
+<GenovateLayout title="GenovateAI - Enterprise AI Implementation Solutions">
+  <PageHero
+    title="Empower Your Business with GenovateAI"
+    subtitle="Unlock the true potential of your business with cutting-edge AI solutions"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    isLanding={true}
+  >
+    <div class="hero-actions">
+      <a href="/schedule-demo" class="primary-button">Schedule a Free Consultation</a>
+      <a href="/genovate/services" class="secondary-button">Explore Our Services</a>
+    </div>
+  </PageHero>
+
+  <PartnerCarousel partners={partners} />
+
+  <section class="services-section">
+    <div class="section-content">
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-subtitle">Comprehensive AI solutions to transform your business operations</p>
+      <ServicesGrid services={services} columns={2} />
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-content">
+      <h2>Ready to Transform Your Business?</h2>
+      <p>Schedule a consultation to discuss your AI implementation needs</p>
+      <div class="cta-buttons">
+        <a href="/schedule-demo" class="primary-button">Schedule a Demo</a>
+        <a href="/genovate/about" class="secondary-button">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterCTA
+    title="Stay Ahead of the Curve"
+    subtitle="Subscribe to our newsletter for the latest in AI implementation"
+    buttonText="Subscribe Now"
+    pattern="grid"
+  />
+</GenovateLayout>
+
+<style>
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .services-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1677442136019-21780ecad995') center/cover;
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .hero-actions,
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

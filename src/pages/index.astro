@@ -1,0 +1,228 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import GenovateFeatures from '../components/GenovateFeatures.astro';
+import NewsletterCTA from '../components/NewsletterCTA.astro';
+
+const valueProps = [
+  {
+    icon: "🎯",
+    title: "Proven Experience",
+    description: "Extensive track record of nurturing companies from inception to success with deep tech investment expertise."
+  },
+  {
+    icon: "💡",
+    title: "Comprehensive Support",
+    description: "Beyond capital, we offer resources, strategic guidance, and focus on product-market fit and smart growth strategies."
+  },
+  {
+    icon: "🌐",
+    title: "Extensive Network",
+    description: "Strong connections within the Israeli ecosystem and globally, providing access to key industry players and resources."
+  },
+  {
+    icon: "🚀",
+    title: "Innovative Value Creation",
+    description: "Pioneering new investment fields and innovative programs to foster the next generation of entrepreneurs."
+  },
+  {
+    icon: "⚡",
+    title: "Technical Expertise",
+    description: "Advanced automation in sourcing and screening processes to streamline early-stage opportunities."
+  },
+  {
+    icon: "📈",
+    title: "Strategic Investments",
+    description: "Targeting early-stage AI companies with high growth potential and innovative solutions leveraging generative AI."
+  }
+];
+
+const investmentFocus = [
+  {
+    icon: "🤖",
+    title: "Generative AI",
+    description: "Investing in next-generation AI models and applications that create, augment, and transform industries."
+  },
+  {
+    icon: "⚡",
+    title: "Agentic AI",
+    description: "Supporting autonomous AI systems that can understand, decide, and act independently."
+  },
+  {
+    icon: "🌐",
+    title: "Web3",
+    description: "Backing decentralized technologies reshaping the future of digital ownership and finance."
+  },
+  {
+    icon: "🦾",
+    title: "Robotics",
+    description: "Developing innovative robotics solutions that combine AI with physical automation."
+  }
+];
+---
+
+<Layout title="Meta3Ventures - Shaping the Future with AI-Driven Innovation">
+  <Hero
+    title="Unlocking the Future with Generative AI"
+    subtitle="At Meta3 Ventures, we believe in the power of generative AI to revolutionize industries and create unprecedented opportunities. Our mission is to be at the forefront of this technological transformation, fostering innovation and supporting groundbreaking ventures."
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    isLanding={true}
+  >
+    <div class="hero-actions">
+      <a href="/apply" class="primary-button">Apply for Partnership</a>
+      <a href="/portfolio" class="secondary-button">View Portfolio</a>
+    </div>
+  </Hero>
+
+  <section class="investment-section">
+    <div class="section-content">
+      <h2 class="section-title">Investment Focus</h2>
+      <p class="section-subtitle">Strategic investments in transformative technologies</p>
+      <GenovateFeatures features={investmentFocus} columns={4} showLink={false} />
+    </div>
+  </section>
+
+  <section class="value-section">
+    <div class="section-content">
+      <h2 class="section-title">Our Value Proposition</h2>
+      <p class="section-subtitle">How we help founders build transformative companies</p>
+      <GenovateFeatures features={valueProps} columns={3} showLink={false} />
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-content">
+      <h2>Ready to Build the Future?</h2>
+      <p>Join our portfolio of innovative companies shaping the future of technology</p>
+      <div class="cta-buttons">
+        <a href="/apply" class="primary-button">Apply for Partnership</a>
+        <a href="/contact" class="secondary-button">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterCTA
+    title="Stay Updated"
+    subtitle="Subscribe to our newsletter for the latest insights and investment opportunities"
+    buttonText="Subscribe Now"
+    pattern="grid"
+  />
+</Layout>
+
+<style>
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .investment-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.98), rgba(10, 11, 30, 0.98)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+  }
+
+  .value-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1677442136019-21780ecad995') center/cover;
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .hero-actions,
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

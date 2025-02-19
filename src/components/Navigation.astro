@@ -1,0 +1,17 @@
+---
+import BaseNavigation from './BaseNavigation.astro';
+import { META3_NAV } from '../lib/navigation';
+
+interface Props {
+  brand?: 'meta3' | 'genovate';
+}
+
+const { brand = 'meta3' } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<BaseNavigation
+  brand={brand}
+  currentPath={currentPath}
+  navItems={META3_NAV}
+/>

@@ -1,0 +1,50 @@
+---
+interface Props {
+  message: string;
+}
+
+const { message } = Astro.props;
+---
+
+<div class="error-message" role="alert">
+  <svg xmlns="http://www.w3.org/2000/svg" class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="12"/>
+    <line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>
+  <span>{message}</span>
+</div>
+
+<style>
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .error-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    flex-shrink: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

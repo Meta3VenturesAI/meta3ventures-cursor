@@ -1,0 +1,263 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  pattern?: 'dots' | 'grid' | 'waves';
+}
+
+const {
+  title = "Stay Updated",
+  subtitle = "Subscribe to our newsletter for the latest insights and updates",
+  buttonText = "Subscribe",
+  pattern = 'grid'
+} = Astro.props;
+---
+
+<section class="newsletter-section">
+  <div class="background">
+    <div class={`pattern ${pattern}`}></div>
+    <div class="gradient"></div>
+  </div>
+  <div class="content">
+    <h2>{title}</h2>
+    <p>{subtitle}</p>
+    <form class="newsletter-form" id="newsletter-form">
+      <div class="input-group">
+        <input 
+          type="email" 
+          placeholder="Enter your email address" 
+          required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        >
+        <button type="submit">
+          <span class="button-text">{buttonText}</span>
+          <span class="loading-spinner"></span>
+        </button>
+      </div>
+      <p class="form-message" style="display: none;"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .newsletter-section {
+    position: relative;
+    padding: 6rem 2rem;
+    overflow: hidden;
+  }
+
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 11, 30, 0.95);
+  }
+
+  .pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+  }
+
+  .pattern.dots {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .pattern.grid {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .pattern.waves {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    animation: wave 10s linear infinite;
+  }
+
+  .gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  button {
+    position: relative;
+    padding: 1rem 2rem;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+  }
+
+  .form-message {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .form-message.success {
+    color: #4ade80;
+  }
+
+  .form-message.error {
+    color: #ef4444;
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @keyframes wave {
+    from { background-position: 0 0; }
+    to { background-position: 100% 0; }
+  }
+
+  @media (max-width: 768px) {
+    .newsletter-section {
+      padding: 4rem 1rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    .input-group {
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+const form = document.getElementById('newsletter-form');
+const submitBtn = form?.querySelector('button');
+const buttonText = submitBtn?.querySelector('.button-text');
+const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+const formMessage = form?.querySelector('.form-message');
+
+form?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (submitBtn && buttonText && loadingSpinner && formMessage) {
+    // Show loading state
+    submitBtn.disabled = true;
+    buttonText.style.visibility = 'hidden';
+    loadingSpinner.style.display = 'block';
+    formMessage.style.display = 'none';
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Show success message
+      formMessage.textContent = 'Thank you for subscribing!';
+      formMessage.className = 'form-message success';
+      formMessage.style.display = 'block';
+      form.reset();
+    } catch (error) {
+      // Show error message
+      formMessage.textContent = 'Failed to subscribe. Please try again.';
+      formMessage.className = 'form-message error';
+      formMessage.style.display = 'block';
+    } finally {
+      // Reset button state
+      submitBtn.disabled = false;
+      buttonText.style.visibility = 'visible';
+      loadingSpinner.style.display = 'none';
+    }
+  }
+});
+</script>

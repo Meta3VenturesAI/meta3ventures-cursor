@@ -1,0 +1,244 @@
+---
+import { META3_FOOTER_NAV, GENOVATE_FOOTER_NAV } from '../lib/navigation';
+import { META3, GENOVATE } from '../lib/brands';
+
+interface Props {
+  brand?: 'meta3' | 'genovate';
+}
+
+const { brand = 'meta3' } = Astro.props;
+
+const brandData = brand === 'meta3' ? META3 : GENOVATE;
+const navData = brand === 'meta3' ? META3_FOOTER_NAV : GENOVATE_FOOTER_NAV;
+---
+
+<footer class="footer">
+  <div class="footer-pattern"></div>
+  <div class="footer-gradient"></div>
+  
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <h3 class="brand-name">{brandData.name}</h3>
+        <p class="brand-description">{brandData.description}</p>
+        <div class="social-links">
+          <a href={brandData.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+          <a href={brandData.social.twitter} target="_blank" rel="noopener" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            </svg>
+          </a>
+          <a href={brandData.social.medium} target="_blank" rel="noopener" aria-label="Medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.846 6.887c.03-.295-.083-.586-.303-.784l-2.24-2.7v-.403h6.958l5.378 11.795 4.728-11.795h6.633v.403l-1.916 1.837c-.165.126-.247.333-.213.538v13.498c-.034.204.048.411.213.537l1.871 1.837v.403h-9.412v-.403l1.939-1.882c.19-.19.19-.246.19-.537v-10.91l-5.389 13.688h-.728l-6.275-13.688v9.174c-.052.385.076.774.347 1.052l2.521 3.058v.404h-7.148v-.404l2.521-3.058c.27-.279.39-.67.325-1.052v-10.608z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="links-group">
+          <h4>Company</h4>
+          <ul>
+            {navData.company.map(link => (
+              <li><a href={link.href}>{link.text}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="links-group">
+          <h4>Resources</h4>
+          <ul>
+            {navData.resources.map(link => (
+              <li><a href={link.href}>{link.text}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="links-group">
+          <h4>Legal</h4>
+          <ul>
+            {navData.legal.map(link => (
+              <li><a href={link.href}>{link.text}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} {brandData.name}. All rights reserved.</p>
+      <div class="legal-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background: rgba(10, 11, 30, 0.98);
+    padding: 6rem 0 2rem;
+    margin-top: 6rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .footer-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  .footer-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .footer-content {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  .brand-name {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0 0 1rem;
+  }
+
+  .brand-description {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-links a {
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+  }
+
+  .social-links a:hover {
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .links-group h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .links-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .links-group li {
+    margin: 0.75rem 0;
+  }
+
+  .links-group a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .links-group a:hover {
+    color: white;
+    transform: translateX(5px);
+  }
+
+  .footer-bottom {
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+  }
+
+  .legal-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .legal-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .legal-links a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1024px) {
+    .footer-main {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer {
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-links {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .legal-links {
+      justify-content: center;
+    }
+  }
+</style>

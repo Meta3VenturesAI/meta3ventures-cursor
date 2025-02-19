@@ -1,0 +1,67 @@
+---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title,
+  description = "Meta3Ventures - Building the future of technology through strategic investments and active company building in AI, Web3, and Robotics."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Navigation />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: rgb(99, 102, 241);
+    --accent-light: rgb(145, 149, 237);
+    --background: rgb(10, 11, 30);
+    --text: rgb(255, 255, 255);
+    --text-muted: rgba(255, 255, 255, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+    padding-top: 80px;
+  }
+</style>

@@ -1,0 +1,517 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { validateContactForm } from '../lib/forms';
+import { FORM_MESSAGES } from '../lib/constants';
+
+let success = false;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const validation = validateContactForm(formData);
+
+    if (!validation.isValid) {
+      throw new Error(Object.values(validation.errors)[0]);
+    }
+
+    if (isSupabaseConfigured()) {
+      const { error: insertError } = await supabase
+        .from('contact_messages')
+        .insert([{
+          name: formData.get('name'),
+          email: formData.get('email'),
+          company: formData.get('company'),
+          phone: formData.get('phone'),
+          message: formData.get('message'),
+          type: 'contact_meta3'
+        }]);
+
+      if (insertError) throw insertError;
+    }
+
+    success = true;
+  } catch (e) {
+    error = e instanceof Error ? e.message : FORM_MESSAGES.ERROR.SUBMISSION_FAILED;
+    console.error('Error:', e);
+  }
+}
+---
+
+<Layout title="Contact Us - Meta3Ventures">
+  <PageHero
+    title="Contact Us"
+    subtitle="Get in touch with our team to discuss your venture or investment opportunities"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <section class="contact-section">
+    <div class="content-container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="info-card">
+            <h2>Let's Connect</h2>
+            <p class="info-text">
+              Whether you're a founder looking for investment or a potential partner interested in collaboration, we're here to help.
+            </p>
+            
+            <div class="contact-methods">
+              <div class="contact-method">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <div>
+                  <h3>Email</h3>
+                  <a href="mailto:contact@meta3ventures.com">contact@meta3ventures.com</a>
+                </div>
+              </div>
+
+              <div class="contact-method">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div>
+                  <h3>Location</h3>
+                  <p>San Francisco, CA</p>
+                </div>
+              </div>
+
+              <div class="contact-method">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <div>
+                  <h3>Investment Focus</h3>
+                  <p>AI, Web3, and Robotics</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="social-links">
+              <a href="https://linkedin.com/company/meta3ventures" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+              <a href="https://twitter.com/meta3ventures" target="_blank" rel="noopener" aria-label="Twitter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-container">
+          {success ? (
+            <div class="success-message">
+              <div class="success-content">
+                <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <h2>Message Sent!</h2>
+                <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+                <div class="success-actions">
+                  <a href="/" class="button primary">Return to Home</a>
+                  <button onclick="window.location.reload()" class="button secondary">Send Another Message</button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <form method="POST" class="contact-form" id="contact-form">
+              {error && <div class="error-message" role="alert">{error}</div>}
+              
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="name">Full Name *</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                    minlength="2"
+                    maxlength="100"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email Address *</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="company">Company Name</label>
+                  <input 
+                    type="text" 
+                    id="company" 
+                    name="company"
+                    placeholder="Enter your company name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="message">Message *</label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    rows="5" 
+                    required
+                    minlength="10"
+                    maxlength="1000"
+                    placeholder="How can we help you?"
+                  ></textarea>
+                  <div class="character-count">
+                    <span id="message-count">0</span>/1000
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-button">
+                <span class="button-text">Send Message</span>
+                <span class="loading-spinner"></span>
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .content-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .info-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .info-card h2 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-text {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-method {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    color: var(--accent);
+  }
+
+  .contact-method h3 {
+    color: white;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .contact-method p,
+  .contact-method a {
+    color: var(--text-muted);
+    margin: 0.25rem 0 0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .contact-method a:hover {
+    color: var(--accent);
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-links a {
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+  }
+
+  .social-links a:hover {
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .form-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .character-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .submit-button {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .success-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 48px;
+    height: 48px;
+    stroke: #4ade80;
+    stroke-width: 2;
+    margin-bottom: 1rem;
+  }
+
+  .success-message h2 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .success-message p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .button.primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .button.primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  .button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .button.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2rem 1rem;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .success-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+// Character count for message
+const messageTextarea = document.getElementById('message');
+const messageCount = document.getElementById('message-count');
+
+messageTextarea?.addEventListener('input', () => {
+  if (messageCount) {
+    messageCount.textContent = messageTextarea.value.length;
+  }
+});
+
+// Form submission handling
+const form = document.getElementById('contact-form');
+const submitBtn = form?.querySelector('.submit-button');
+const buttonText = submitBtn?.querySelector('.button-text');
+const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+
+form?.addEventListener('submit', () => {
+  if (submitBtn && buttonText && loadingSpinner) {
+    submitBtn.disabled = true;
+    buttonText.style.visibility = 'hidden';
+    loadingSpinner.style.display = 'block';
+  }
+});
+</script>

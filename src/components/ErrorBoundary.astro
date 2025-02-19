@@ -1,0 +1,83 @@
+---
+interface Props {
+  fallback?: string;
+}
+
+const { fallback = "Something went wrong. Please try again later." } = Astro.props;
+---
+
+<div class="error-boundary">
+  <slot>
+    <div class="error-content">
+      <svg xmlns="http://www.w3.org/2000/svg" class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>{fallback}</p>
+      <button onclick="window.location.reload()" class="retry-button">
+        Try Again
+      </button>
+    </div>
+  </slot>
+</div>
+
+<style>
+  .error-boundary {
+    padding: 2rem;
+    text-align: center;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    color: #ef4444;
+  }
+
+  .error-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .error-icon {
+    width: 48px;
+    height: 48px;
+    stroke-width: 2;
+    margin-bottom: 1rem;
+  }
+
+  .retry-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .retry-button:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+class ErrorBoundary extends HTMLElement {
+  constructor() {
+    super();
+    this.handleError = this.handleError.bind(this);
+    window.addEventListener('error', this.handleError);
+  }
+
+  handleError(event: ErrorEvent) {
+    event.preventDefault();
+    this.innerHTML = this.querySelector('.error-content')?.outerHTML || '';
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('error', this.handleError);
+  }
+}
+
+customElements.define('error-boundary', ErrorBoundary);
+</script>

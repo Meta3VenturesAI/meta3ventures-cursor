@@ -1,0 +1,50 @@
+```astro
+---
+import { BRAND_SWITCH } from '../lib/navigation';
+
+interface Props {
+  currentBrand: 'meta3' | 'genovate';
+}
+
+const { currentBrand } = Astro.props;
+const switchTo = BRAND_SWITCH[currentBrand];
+---
+
+<a 
+  href={switchTo.href} 
+  class="brand-switch" 
+  data-brand={currentBrand}
+  data-tracking="brand-switch"
+>
+  <span class="switch-icon">{switchTo.icon}</span>
+  <span class="switch-text">{switchTo.text}</span>
+</a>
+
+<style>
+  .brand-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .brand-switch:hover {
+    background: rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .switch-icon {
+    font-size: 1.2rem;
+  }
+
+  .switch-text {
+    white-space: nowrap;
+  }
+</style>
+```

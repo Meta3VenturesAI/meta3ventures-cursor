@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+const { slug } = Astro.params;
+
+// Default resource content if Supabase is not configured
+const defaultResource = {
+  title: "AI Implementation Guide",
+  content: `
+    <h2>Getting Started</h2>
+    <p>This guide will help you implement AI solutions in your organization...</p>
+    
+    <h2>Key Considerations</h2>
+    <p>Before implementing AI, consider these important factors...</p>
+    
+    <h2>Step-by-Step Process</h2>
+    <p>Follow these steps to successfully implement AI...</p>
+  `,
+  image: "https://images.unsplash.com/photo-1677442136019-21780ecad995"
+};
+
+let resource = defaultResource;
+
+if (isSupabaseConfigured() && slug) {
+  try {
+    const { data } = await supabase!
+      .from('resources')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+    
+    if (data) {
+      resource = data;
+    }
+  } catch (e) {
+    console.error('Error fetching resource:', e);
+  }
+}
+---
+
+<BaseLayout title={`${resource.title} - Meta3Ventures Resources`}>
+  <article class="resource">
+    {resource.image && (
+      <div class="resource-hero" style={`background-image: url(${resource.image})`}>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>{resource.title}</h1>
+        </div>
+      </div>
+    )}
+    
+    <div class="resource-content" set:html={resource.content} />
+  </article>
+</BaseLayout>
+
+<style>
+  .resource-hero {
+    height: 50vh;
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 11, 30, 0.7);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: white;
+  }
+
+  .resource-content {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  .resource-content :global(h2) {
+    font-size: 2rem;
+    color: var(--text);
+    margin: 2rem 0 1rem;
+  }
+
+  .resource-content :global(p) {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .resource-hero {
+      height: 40vh;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .resource-content {
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+  }
+</style>

@@ -1,0 +1,372 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsletterCTA from '../../components/NewsletterCTA.astro';
+
+const team = [
+  {
+    name: "Dr. Sarah Chen",
+    position: "CEO & Chief AI Officer",
+    bio: "Former AI Research Lead at DeepMind with 15+ years of experience in enterprise AI implementation.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400",
+    linkedin: "https://linkedin.com/in/sarahchen"
+  },
+  {
+    name: "Michael Rodriguez",
+    position: "CTO",
+    bio: "20+ years of experience in enterprise software and AI implementation. Previously led technical teams at Google and Microsoft.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+    linkedin: "https://linkedin.com/in/michaelrodriguez"
+  },
+  {
+    name: "Dr. Emily Watson",
+    position: "Head of AI Implementation",
+    bio: "PhD in Machine Learning from MIT, specializing in enterprise AI solutions and automation.",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400",
+    linkedin: "https://linkedin.com/in/emilywatson"
+  }
+];
+
+const values = [
+  {
+    icon: "🎯",
+    title: "Excellence",
+    description: "We strive for excellence in every AI implementation, ensuring the highest standards of quality and performance."
+  },
+  {
+    icon: "💡",
+    title: "Innovation",
+    description: "Continuously pushing boundaries to deliver cutting-edge AI solutions that drive real business value."
+  },
+  {
+    icon: "🤝",
+    title: "Partnership",
+    description: "Building lasting relationships with our clients through trust, transparency, and shared success."
+  },
+  {
+    icon: "⚡",
+    title: "Impact",
+    description: "Creating meaningful impact through AI solutions that transform businesses and drive growth."
+  }
+];
+---
+
+<GenovateLayout title="About - GenovateAI">
+  <PageHero
+    title="About GenovateAI"
+    subtitle="Your Partner in AI Implementation"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <section class="mission-section">
+    <div class="section-content">
+      <div class="mission-grid">
+        <div class="mission-content">
+          <h2>Our Mission</h2>
+          <p class="mission-text">
+            At GenovateAI, we're on a mission to democratize AI implementation for businesses of all sizes. We believe that artificial intelligence should be accessible, practical, and transformative for every organization.
+          </p>
+          <p class="mission-text">
+            Through our expertise in AI implementation, we help businesses navigate the complexities of artificial intelligence, ensuring successful integration that drives real business value. Our approach combines technical excellence with practical business understanding, delivering solutions that are both innovative and impactful.
+          </p>
+        </div>
+        <div class="mission-values">
+          {values.map(value => (
+            <div class="value-card">
+              <div class="value-icon">{value.icon}</div>
+              <div class="value-content">
+                <h3>{value.title}</h3>
+                <p>{value.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="section-content">
+      <h2 class="section-title">Our Leadership Team</h2>
+      <p class="section-subtitle">Meet the experts behind our AI implementation success</p>
+      
+      <div class="team-grid">
+        {team.map(member => (
+          <div class="team-member">
+            <div class="member-image" style={`background-image: url(${member.image})`}></div>
+            <div class="member-content">
+              <h3>{member.name}</h3>
+              <span class="position">{member.position}</span>
+              <p>{member.bio}</p>
+              <a href={member.linkedin} target="_blank" rel="noopener" class="linkedin-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                Connect on LinkedIn
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-content">
+      <h2>Ready to Transform Your Business?</h2>
+      <p>Schedule a consultation to discuss your AI implementation needs</p>
+      <div class="cta-buttons">
+        <a href="/schedule-demo" class="primary-button">Schedule a Demo</a>
+        <a href="/genovate/services" class="secondary-button">View Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterCTA
+    title="Stay Updated"
+    subtitle="Subscribe to our newsletter for the latest in AI implementation"
+    buttonText="Subscribe Now"
+    pattern="grid"
+  />
+</GenovateLayout>
+
+<style>
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .mission-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.98), rgba(10, 11, 30, 0.98)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+  }
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .mission-content h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .mission-text {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .mission-values {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .value-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .value-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .value-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .value-content h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .value-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .team-member {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .team-member:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .member-image {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .member-content {
+    padding: 2rem;
+  }
+
+  .member-content h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .position {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .member-content p {
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+
+  .linkedin-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .linkedin-link:hover {
+    color: var(--accent);
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .mission-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .value-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+```

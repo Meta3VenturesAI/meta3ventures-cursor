@@ -1,0 +1,153 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+---
+
+<Layout title="Privacy Policy - Meta3Ventures">
+  <PageHero
+    title="Privacy Policy"
+    subtitle="How we handle and protect your information"
+    background="https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <div class="content-container">
+    <div class="policy-content">
+      <section>
+        <h2>Introduction</h2>
+        <p>This Privacy Policy explains how Meta3Ventures and GenovateAI ("we", "us", or "our") collect, use, and protect your personal information. We are committed to protecting your privacy and ensuring the security of your personal data.</p>
+      </section>
+
+      <section>
+        <h2>Information We Collect</h2>
+        <h3>Personal Information</h3>
+        <p>We collect information that you provide directly to us, including:</p>
+        <ul>
+          <li>Name and contact information</li>
+          <li>Company details</li>
+          <li>Professional background</li>
+          <li>Communication preferences</li>
+        </ul>
+
+        <h3>Automatically Collected Information</h3>
+        <p>We automatically collect certain information when you visit our website:</p>
+        <ul>
+          <li>Device and browser information</li>
+          <li>IP address and location data</li>
+          <li>Usage data and analytics</li>
+          <li>Cookies and similar technologies</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>How We Use Your Information</h2>
+        <p>We use your information for the following purposes:</p>
+        <ul>
+          <li>Providing our services</li>
+          <li>Processing applications</li>
+          <li>Communication and updates</li>
+          <li>Service improvement</li>
+          <li>Legal compliance</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Data Protection</h2>
+        <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+      </section>
+
+      <section>
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Access your personal data</li>
+          <li>Correct inaccurate data</li>
+          <li>Request deletion of your data</li>
+          <li>Object to data processing</li>
+          <li>Data portability</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy or our data practices, please contact us at:</p>
+        <p><a href="mailto:privacy@meta3ventures.com">privacy@meta3ventures.com</a></p>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .policy-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  section {
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin: 1.5rem 0 1rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  li {
+    color: var(--text-muted);
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--accent-light);
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2rem 1rem;
+    }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+---
+
+<Layout title="Terms of Service - Meta3Ventures">
+  <PageHero
+    title="Terms of Service"
+    subtitle="Please read these terms carefully before using our services"
+    background="https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <div class="content-container">
+    <div class="terms-content">
+      <section>
+        <h2>1. Agreement to Terms</h2>
+        <p>By accessing or using Meta3Ventures and GenovateAI services, you agree to be bound by these Terms of Service and all applicable laws and regulations.</p>
+      </section>
+
+      <section>
+        <h2>2. Services</h2>
+        <p>We provide venture capital investment, company building, and AI implementation services. Our services include:</p>
+        <ul>
+          <li>Investment in early-stage companies</li>
+          <li>Strategic guidance and support</li>
+          <li>AI implementation and consulting</li>
+          <li>Technical development services</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Intellectual Property</h2>
+        <p>All content, features, and functionality of our services are owned by Meta3Ventures and GenovateAI and are protected by international copyright, trademark, and other intellectual property laws.</p>
+      </section>
+
+      <section>
+        <h2>4. User Responsibilities</h2>
+        <p>You agree to:</p>
+        <ul>
+          <li>Provide accurate information</li>
+          <li>Maintain confidentiality</li>
+          <li>Use services legally and ethically</li>
+          <li>Respect intellectual property rights</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>5. Limitation of Liability</h2>
+        <p>We shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services.</p>
+      </section>
+
+      <section>
+        <h2>6. Changes to Terms</h2>
+        <p>We reserve the right to modify these terms at any time. We will notify users of any material changes via email or through our website.</p>
+      </section>
+
+      <section>
+        <h2>7. Contact Information</h2>
+        <p>For questions about these Terms of Service, please contact us at:</p>
+        <p><a href="mailto:legal@meta3ventures.com">legal@meta3ventures.com</a></p>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .terms-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  section {
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  li {
+    color: var(--text-muted);
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--accent-light);
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2rem 1rem;
+    }
+  }
+</style>

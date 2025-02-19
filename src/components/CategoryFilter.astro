@@ -1,0 +1,72 @@
+---
+interface Props {
+  categories: string[];
+  activeCategory?: string;
+}
+
+const { categories, activeCategory } = Astro.props;
+---
+
+<div class="categories-filter">
+  <button 
+    class={`category-btn ${!activeCategory ? 'active' : ''}`}
+    data-category="all"
+  >
+    All
+  </button>
+  {categories.map(category => (
+    <button 
+      class={`category-btn ${category === activeCategory ? 'active' : ''}`}
+      data-category={category}
+    >
+      {category}
+    </button>
+  ))}
+</div>
+
+<style>
+  .categories-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .category-btn {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .category-btn:hover,
+  .category-btn.active {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+const categoryBtns = document.querySelectorAll('.category-btn');
+
+categoryBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const category = btn.dataset.category;
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    if (category === 'all') {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', category);
+    }
+    
+    window.location.search = searchParams.toString();
+  });
+});
+</script>

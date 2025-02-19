@@ -1,0 +1,56 @@
+/* Add new styles for form validation */
+.invalid {
+  border-color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.invalid:focus {
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+.form-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Enhance progress indicators */
+.progress-step {
+  position: relative;
+  z-index: 1;
+}
+
+.progress-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+}
+
+.progress-step:last-child::after {
+  display: none;
+}
+
+.progress-step.completed::after {
+  background: #6366f1;
+}
+
+/* Add animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.form-section.active {
+  animation: slideIn 0.3s ease-out;
+}

@@ -1,0 +1,341 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LoadingSpinner from '../../components/LoadingSpinner.astro';
+import NewsletterCTA from '../../components/NewsletterCTA.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+// Default resources for GenovateAI
+const defaultResources = [
+  {
+    title: "AI Implementation Guide",
+    description: "Step-by-step guide for implementing AI solutions in your business.",
+    icon: "📚",
+    categories: ["Guide", "Implementation"],
+    slug: "ai-implementation"
+  },
+  {
+    title: "Data Strategy Toolkit",
+    description: "Essential tools and frameworks for developing your data strategy.",
+    icon: "📊",
+    categories: ["Data", "Strategy"],
+    slug: "data-strategy"
+  },
+  {
+    title: "Automation Playbook",
+    description: "Best practices for implementing workflow automation.",
+    icon: "⚡",
+    categories: ["Automation", "Guide"],
+    slug: "automation-playbook"
+  },
+  {
+    title: "AI Tools Directory",
+    description: "Comprehensive directory of AI tools and platforms for business.",
+    icon: "🛠️",
+    categories: ["Tools", "AI"],
+    slug: "ai-tools"
+  },
+  {
+    title: "ROI Calculator",
+    description: "Calculate the potential return on investment for AI implementation.",
+    icon: "💰",
+    categories: ["Tools", "Business"],
+    slug: "roi-calculator"
+  },
+  {
+    title: "Case Studies",
+    description: "Real-world examples of successful AI implementations.",
+    icon: "📈",
+    categories: ["Case Studies", "Success Stories"],
+    slug: "case-studies"
+  }
+];
+
+let resources = defaultResources;
+let error = null;
+let isLoading = true;
+
+if (isSupabaseConfigured()) {
+  try {
+    const { data, error: supabaseError } = await supabase!
+      .from('genovate_resources')
+      .select('*')
+      .eq('is_published', true)
+      .order('created_at', { ascending: false });
+
+    if (supabaseError) {
+      console.error('Error fetching resources:', supabaseError);
+    } else if (data && data.length > 0) {
+      resources = data;
+    }
+  } catch (e) {
+    console.error('Error:', e);
+  }
+}
+
+isLoading = false;
+
+// Get unique categories for filtering
+const categories = [...new Set(resources.flatMap(r => r.categories))].sort();
+---
+
+<GenovateLayout title="Resources - GenovateAI">
+  <main>
+    <PageHero
+      title="Resources"
+      subtitle="Tools and Guides for AI Implementation"
+      background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+      pattern="grid"
+      height="40vh"
+    />
+    
+    <section class="resources-section">
+      <div class="section-content">
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <div class="filters">
+              <button class="filter-btn active" data-category="all">All</button>
+              {categories.map(category => (
+                <button class="filter-btn" data-category={category}>{category}</button>
+              ))}
+            </div>
+
+            <div class="resources-grid">
+              {resources.map(resource => (
+                <a href={`/genovate/resources/${resource.slug}`} class="resource-card" data-categories={resource.categories.join(',')}>
+                  <div class="resource-icon">{resource.icon}</div>
+                  <div class="resource-content">
+                    <h3>{resource.title}</h3>
+                    <p>{resource.description}</p>
+                    <div class="categories">
+                      {resource.categories.map(category => (
+                        <span class="category">{category}</span>
+                      ))}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="section-content">
+        <h2>Ready to Transform Your Business?</h2>
+        <p>Schedule a demo to see how we can help implement AI solutions</p>
+        <div class="cta-buttons">
+          <a href="/contact" class="primary-button">Schedule a Demo</a>
+          <a href="/services" class="secondary-button">View Our Services</a>
+        </div>
+      </div>
+    </section>
+
+    <NewsletterCTA />
+  </main>
+</GenovateLayout>
+
+<style>
+  .resources-section {
+    padding: 4rem 0;
+  }
+
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .filters {
+    margin-bottom: 3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: #6366f1;
+    transform: translateY(-2px);
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .resource-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .resource-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .resource-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .resource-content {
+    flex: 1;
+  }
+
+  .resource-content h3 {
+    margin: 0 0 1rem;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .resource-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+
+  .categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .category {
+    background: rgba(99, 102, 241, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .resource-card:hover .category {
+    background: rgba(99, 102, 241, 0.2);
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: #6366f1;
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .resources-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .resource-card {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .categories {
+      justify-content: center;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .section-content {
+      padding: 0 1rem;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const resources = document.querySelectorAll('.resource-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter resources with animation
+      const category = btn.dataset.category;
+      resources.forEach(resource => {
+        resource.style.opacity = '0';
+        resource.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          if (category === 'all' || resource.dataset.categories.includes(category)) {
+            resource.style.display = 'flex';
+            setTimeout(() => {
+              resource.style.opacity = '1';
+              resource.style.transform = 'translateY(0)';
+            }, 50);
+          } else {
+            resource.style.display = 'none';
+          }
+        }, 300);
+      });
+    });
+  });
+});
+</script>

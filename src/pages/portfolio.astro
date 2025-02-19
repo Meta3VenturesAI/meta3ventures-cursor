@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import PortfolioCarousel from '../components/PortfolioCarousel.astro';
+
+const portfolioCompanies = [
+  // AI Companies
+  {
+    name: "AIFlow",
+    description: "Enterprise-grade AI workflow automation platform revolutionizing business processes with cutting-edge artificial intelligence.",
+    category: "AI",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995"
+  },
+  {
+    name: "DataSense",
+    description: "Advanced data analytics platform leveraging AI to deliver actionable business insights in real-time.",
+    category: "AI",
+    image: "https://images.unsplash.com/photo-1678382159568-41c2dbc7d8c6"
+  },
+  {
+    name: "AutomateAI",
+    description: "Intelligent process automation platform streamlining business operations with state-of-the-art AI.",
+    category: "AI",
+    image: "https://images.unsplash.com/photo-1642104704074-907c0698cbd9"
+  },
+  // Web3 Companies
+  {
+    name: "BlockChainX",
+    description: "Next-generation blockchain infrastructure enabling secure, scalable, and efficient decentralized applications.",
+    category: "Web3",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0"
+  },
+  {
+    name: "CryptoSecure",
+    description: "Enterprise blockchain security solutions protecting digital assets with military-grade encryption.",
+    category: "Web3",
+    image: "https://images.unsplash.com/photo-1642104704074-907c0698cbd9"
+  },
+  {
+    name: "DeFiPro",
+    description: "Professional-grade decentralized finance tools for institutional investors and enterprises.",
+    category: "Web3",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0"
+  },
+  // Robotics Companies
+  {
+    name: "RoboTech",
+    description: "AI-powered robotics solutions transforming manufacturing and logistics through intelligent automation.",
+    category: "Robotics",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+  },
+  {
+    name: "AutoBot",
+    description: "Autonomous mobile robots for warehouse operations and last-mile delivery.",
+    category: "Robotics",
+    image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2"
+  },
+  {
+    name: "CoBot Systems",
+    description: "Collaborative robotics solutions for safe human-robot interaction in manufacturing.",
+    category: "Robotics",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e"
+  }
+];
+---
+
+<Layout title="Portfolio - Meta3Ventures">
+  <PageHero
+    title="Our Portfolio"
+    subtitle="Innovative companies shaping the future of technology"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+  />
+
+  <section class="portfolio-section">
+    <div class="content-container">
+      <PortfolioCarousel companies={portfolioCompanies} />
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="content-container">
+      <h2>Ready to Join Our Portfolio?</h2>
+      <p>We're always looking for innovative companies pushing the boundaries of technology</p>
+      <div class="cta-buttons">
+        <a href="/apply" class="primary-button">Apply for Partnership</a>
+        <a href="/contact" class="secondary-button">Contact Us</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .content-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2rem 1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

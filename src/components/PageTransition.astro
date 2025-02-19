@@ -1,0 +1,42 @@
+---
+---
+<div class="page-transition">
+  <div class="transition-overlay"></div>
+</div>
+
+<style>
+  .page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .transition-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  :global(.transitioning) .transition-overlay {
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+document.addEventListener('astro:before-preparation', () => {
+  document.documentElement.classList.add('transitioning');
+});
+
+document.addEventListener('astro:after-preparation', () => {
+  document.documentElement.classList.remove('transitioning');
+});
+</script>

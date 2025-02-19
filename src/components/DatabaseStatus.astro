@@ -1,0 +1,37 @@
+---
+import { checkDatabaseConnection } from '../lib/supabase';
+
+const isConnected = await checkDatabaseConnection();
+---
+
+{!isConnected && (
+  <div class="database-status-error">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <span>Database connection not configured. Some features may be limited.</span>
+  </div>
+)}
+
+<style>
+  .database-status-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    flex-shrink: 0;
+  }
+</style>

@@ -1,0 +1,576 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import FormErrorMessage from '../components/FormErrorMessage.astro';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { validateApplicationForm } from '../lib/forms';
+import { FORM_MESSAGES } from '../lib/constants';
+
+let success = false;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const validation = validateApplicationForm(formData);
+
+    if (!validation.isValid) {
+      throw new Error(Object.values(validation.errors)[0]);
+    }
+
+    // Handle file upload
+    const deckFile = formData.get('deck-file') as File;
+    let deckUrl = '';
+
+    if (deckFile && deckFile.size > 0) {
+      if (deckFile.size > 10 * 1024 * 1024) { // 10MB limit
+        throw new Error('Deck file size must be less than 10MB');
+      }
+
+      if (isSupabaseConfigured()) {
+        const fileName = `${Date.now()}-${deckFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('decks')
+          .upload(fileName, deckFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('decks')
+          .getPublicUrl(fileName);
+
+        deckUrl = publicUrl;
+      }
+    }
+
+    const application = {
+      founder_name: formData.get('founder_name'),
+      company_name: formData.get('company_name'),
+      email: formData.get('email'),
+      website: formData.get('website'),
+      linkedin: formData.get('linkedin'),
+      company_usp: formData.get('company_usp'),
+      pitch: formData.get('pitch'),
+      team_size: formData.get('team-size'),
+      funding_stage: formData.get('funding-stage'),
+      investment_amount: formData.get('investment-amount'),
+      tech_category: formData.get('tech-category'),
+      deck_url: deckUrl,
+      status: 'new'
+    };
+
+    if (isSupabaseConfigured()) {
+      const { error: insertError } = await supabase
+        .from('applications')
+        .insert([application]);
+
+      if (insertError) throw insertError;
+    }
+
+    success = true;
+  } catch (e) {
+    error = e instanceof Error ? e.message : FORM_MESSAGES.ERROR.SUBMISSION_FAILED;
+    console.error('Error:', e);
+  }
+}
+---
+
+<Layout title="Apply for Partnership - Meta3Ventures">
+  <PageHero
+    title="Apply for Partnership"
+    subtitle="Join our portfolio of innovative companies shaping the future of technology"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+  />
+
+  <section class="apply-section">
+    <div class="content-container">
+      {success ? (
+        <div class="success-message" role="alert">
+          <div class="success-content">
+            <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h2>Application Submitted!</h2>
+            <p>Thank you for your interest in partnering with Meta3Ventures. We'll review your application and get back to you within 5 business days.</p>
+            <div class="success-actions">
+              <a href="/" class="button primary">Return to Home</a>
+              <button onclick="window.location.reload()" class="button secondary">Submit Another Application</button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <form method="POST" class="application-form" id="application-form" enctype="multipart/form-data">
+          {error && <FormErrorMessage message={error} />}
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="founder_name">Full Name *</label>
+              <input 
+                type="text" 
+                id="founder_name" 
+                name="founder_name" 
+                required 
+                minlength="2"
+                maxlength="100"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="company_name">Company Name *</label>
+              <input 
+                type="text" 
+                id="company_name" 
+                name="company_name" 
+                required
+                placeholder="Enter your company name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="website">Website</label>
+              <input 
+                type="url" 
+                id="website" 
+                name="website"
+                placeholder="https://..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="linkedin">LinkedIn Profile *</label>
+              <input 
+                type="url" 
+                id="linkedin" 
+                name="linkedin" 
+                required
+                placeholder="https://linkedin.com/in/..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="tech-category">Technology Category *</label>
+              <select id="tech-category" name="tech-category" required>
+                <option value="">Select category...</option>
+                <option value="Generative AI">Generative AI</option>
+                <option value="Agentic AI">Agentic AI</option>
+                <option value="Web3">Web3</option>
+                <option value="Robotics">Robotics</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="team-size">Team Size</label>
+              <select id="team-size" name="team-size">
+                <option value="">Select team size...</option>
+                <option value="1-5">1-5</option>
+                <option value="6-10">6-10</option>
+                <option value="11-25">11-25</option>
+                <option value="26-50">26-50</option>
+                <option value="50+">50+</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="funding-stage">Current Funding Stage *</label>
+              <select id="funding-stage" name="funding-stage" required>
+                <option value="">Select stage...</option>
+                <option value="Pre-seed">Pre-seed</option>
+                <option value="Seed">Seed</option>
+                <option value="Series A">Series A</option>
+                <option value="Series B">Series B</option>
+                <option value="Series C+">Series C+</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="investment-amount">Investment Sought</label>
+              <input 
+                type="text" 
+                id="investment-amount" 
+                name="investment-amount"
+                placeholder="e.g., $500K - $2M"
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="company_usp">Company USP *</label>
+              <textarea 
+                id="company_usp" 
+                name="company_usp" 
+                rows="3" 
+                required
+                placeholder="What makes your company unique?"
+              ></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="deck-file">Company Deck</label>
+              <div class="file-upload">
+                <input 
+                  type="file" 
+                  id="deck-file" 
+                  name="deck-file"
+                  accept=".pdf,.ppt,.pptx"
+                  class="file-input"
+                />
+                <label for="deck-file" class="file-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span>Choose file or drag & drop</span>
+                </label>
+                <span class="file-name"></span>
+              </div>
+              <span class="field-hint">Accepted formats: PDF, PPT, PPTX (max 10MB)</span>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="pitch">Additional Information</label>
+              <textarea 
+                id="pitch" 
+                name="pitch" 
+                rows="6" 
+                placeholder="Tell us more about your company's vision and how Meta3Ventures can help you achieve your goals."
+              ></textarea>
+              <div class="character-count">
+                <span id="pitch-count">0</span>/2000
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-button">
+            <span class="button-text">Submit Application</span>
+            <span class="loading-spinner"></span>
+          </button>
+        </form>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .apply-section {
+    padding: 4rem 0;
+  }
+
+  .content-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .application-form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    color: white;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .character-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.5rem;
+  }
+
+  .submit-button {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .success-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 48px;
+    height: 48px;
+    stroke: #4ade80;
+    stroke-width: 2;
+    margin-bottom: 1rem;
+  }
+
+  .success-message h2 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .success-message p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .button.primary {
+    background: #6366f1;
+    color: white;
+  }
+
+  .button.primary:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+  }
+
+  .button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .button.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .file-upload {
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .file-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .file-input:hover + .file-label,
+  .file-input:focus + .file-label {
+    border-color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  .upload-icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+  }
+
+  .file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .field-hint {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .content-container {
+      padding: 0 1rem;
+    }
+
+    .success-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+// File upload handling
+const fileInput = document.getElementById('deck-file') as HTMLInputElement;
+const fileName = document.querySelector('.file-name');
+
+fileInput?.addEventListener('change', () => {
+  if (fileName && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    fileName.textContent = file.name;
+    
+    // Validate file size
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+      alert('File size must be less than 10MB');
+      fileInput.value = '';
+      fileName.textContent = '';
+    }
+  } else if (fileName) {
+    fileName.textContent = '';
+  }
+});
+
+// Character count for pitch
+const pitchTextarea = document.getElementById('pitch');
+const pitchCount = document.getElementById('pitch-count');
+
+pitchTextarea?.addEventListener('input', () => {
+  if (pitchCount) {
+    pitchCount.textContent = pitchTextarea.value.length;
+  }
+});
+
+// Form submission handling
+const form = document.getElementById('application-form');
+const submitBtn = form?.querySelector('.submit-button');
+const buttonText = submitBtn?.querySelector('.button-text');
+const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+
+form?.addEventListener('submit', () => {
+  if (submitBtn && buttonText && loadingSpinner) {
+    submitBtn.disabled = true;
+    buttonText.style.visibility = 'hidden';
+    loadingSpinner.style.display = 'block';
+  }
+});
+</script>

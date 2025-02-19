@@ -1,0 +1,249 @@
+---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getBreadcrumbs } from '../lib/navigation';
+
+interface Props {
+  title: string;
+  description?: string;
+  brand?: 'meta3' | 'genovate';
+}
+
+const { 
+  title,
+  description = "Meta3Ventures - Building the future of technology through strategic investments and active company building in AI, Web3, and Robotics.",
+  brand = 'meta3'
+} = Astro.props;
+
+const breadcrumbs = getBreadcrumbs(Astro.url.pathname, brand);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#6366f1" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{title}</title>
+    <style>
+      /* Critical CSS to prevent flash */
+      html.dark {
+        background: rgb(10, 11, 30);
+        color: #fff;
+      }
+      body {
+        background: rgb(10, 11, 30);
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="root-container">
+      <div class="page-container">
+        <Navigation brand={brand} />
+        {breadcrumbs.length > 1 && <Breadcrumbs items={breadcrumbs} />}
+        <main>
+          <slot />
+        </main>
+        <Footer brand={brand} />
+      </div>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: rgb(99, 102, 241);
+    --accent-light: rgb(145, 149, 237);
+    --background: rgb(10, 11, 30);
+    --text: rgb(255, 255, 255);
+    --text-muted: rgba(255, 255, 255, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    scroll-behavior: smooth;
+  }
+
+  html.dark {
+    background: var(--background);
+    color: var(--text);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+  }
+
+  .root-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+  }
+
+  main {
+    flex: 1;
+    padding-top: 80px;
+    background: var(--background);
+    position: relative;
+    z-index: 1;
+    contain: content;
+  }
+
+  /* Prevent FOUC and white flashes */
+  html.js-loading * {
+    transition: none !important;
+  }
+
+  /* Force dark background during transitions */
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Prevent white flash during navigation */
+  html.transitioning .page-container {
+    opacity: 0;
+  }
+
+  /* Optimize performance */
+  * {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Image loading styles */
+  .image-blur-placeholder {
+    filter: blur(20px);
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+  }
+
+  .image-loaded {
+    filter: blur(0);
+    transform: scale(1);
+  }
+
+  /* Smooth scrolling */
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Improved focus styles */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Better tap targets on mobile */
+  @media (max-width: 768px) {
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+</style>
+
+<script>
+// Add loading class to prevent transitions during page load
+document.documentElement.classList.add('js-loading', 'dark');
+
+// Remove loading class after page has loaded
+window.addEventListener('load', () => {
+  document.documentElement.classList.remove('js-loading');
+});
+
+// Handle navigation transitions
+document.addEventListener('astro:before-preparation', () => {
+  document.documentElement.classList.add('js-loading', 'transitioning');
+});
+
+document.addEventListener('astro:after-preparation', () => {
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove('js-loading', 'transitioning');
+  });
+});
+
+// Prevent scroll during transitions
+document.addEventListener('astro:before-preparation', () => {
+  document.body.style.overflow = 'hidden';
+});
+
+document.addEventListener('astro:after-preparation', () => {
+  document.body.style.overflow = '';
+});
+
+// Scroll restoration
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// Handle back/forward navigation
+window.addEventListener('popstate', () => {
+  const scrollPosition = sessionStorage.getItem('scrollPosition');
+  if (scrollPosition) {
+    window.scrollTo(0, parseInt(scrollPosition));
+    sessionStorage.removeItem('scrollPosition');
+  }
+});
+
+// Save scroll position before navigation
+document.addEventListener('astro:before-preparation', () => {
+  sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+});
+
+// Image loading
+const images = document.querySelectorAll('img[loading="lazy"]');
+images.forEach(img => {
+  img.classList.add('image-blur-placeholder');
+  img.onload = () => {
+    img.classList.add('image-loaded');
+  };
+});
+</script>

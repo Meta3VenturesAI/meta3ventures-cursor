@@ -1,0 +1,81 @@
+---
+import { checkMigrationStatus } from '../lib/database';
+
+const status = await checkMigrationStatus();
+---
+
+{!status.isComplete && (
+  <div class="migration-status">
+    <div class="status-header">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg>
+      <span>Database Migration Status</span>
+    </div>
+    
+    {status.error ? (
+      <p class="error-message">{status.error}</p>
+    ) : (
+      <div class="pending-migrations">
+        <p>Pending migrations:</p>
+        <ul>
+          {status.pendingMigrations.map(table => (
+            <li>{table}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+)}
+
+<style>
+  .migration-status {
+    background: rgba(234, 179, 8, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.2);
+    color: #eab308;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .status-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    animation: spin 2s linear infinite;
+  }
+
+  .error-message {
+    color: #ef4444;
+    margin: 0;
+  }
+
+  .pending-migrations {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .pending-migrations p {
+    margin: 0 0 0.5rem;
+  }
+
+  .pending-migrations ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .pending-migrations li {
+    margin: 0.25rem 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

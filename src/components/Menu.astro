@@ -1,0 +1,76 @@
+---
+interface MenuItem {
+  text: string;
+  href: string;
+}
+
+interface Props {
+  items: MenuItem[];
+  currentPath: string;
+}
+
+const { items, currentPath } = Astro.props;
+---
+
+<div class="menu">
+  {items.map(item => (
+    <a 
+      href={item.href} 
+      class:list={[
+        'menu-item',
+        { active: currentPath === item.href || currentPath.startsWith(`${item.href}/`) }
+      ]}
+    >
+      {item.text}
+    </a>
+  ))}
+  
+  <div class="menu-actions">
+    <a href="/apply" class="apply-button">Apply for Partnership</a>
+  </div>
+</div>
+
+<style>
+  .menu {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .menu-item {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .menu-item:hover,
+  .menu-item.active {
+    color: var(--accent);
+  }
+
+  .menu-actions {
+    margin-left: 2rem;
+  }
+
+  .apply-button {
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .apply-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .menu {
+      display: none;
+    }
+  }
+</style>

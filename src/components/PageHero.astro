@@ -1,0 +1,113 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  background?: string;
+  pattern?: 'dots' | 'grid' | 'waves';
+  height?: string;
+  isLanding?: boolean;
+}
+
+const { 
+  title,
+  subtitle,
+  background = 'https://images.unsplash.com/photo-1677442136019-21780ecad995',
+  pattern = 'grid',
+  height = '50vh',
+  isLanding = false
+} = Astro.props;
+---
+
+<section class={`hero ${isLanding ? 'landing' : ''}`}>
+  <div class="hero-background" style={`background-image: url('${background}')`}>
+    <div class="overlay"></div>
+    <div class={`pattern ${pattern}`}></div>
+    <div class="gradient"></div>
+  </div>
+  
+  <div class="hero-content">
+    <h1>{title}</h1>
+    <p class="subtitle">{subtitle}</p>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--hero-height, 50vh);
+    margin-top: -80px;
+    padding-top: 80px;
+  }
+
+  .hero.landing {
+    --hero-height: 60vh;
+  }
+
+  .hero-background {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 11, 30, 0.85);
+  }
+
+  .pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+  }
+
+  .pattern.grid {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+    }
+  }
+</style>

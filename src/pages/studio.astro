@@ -1,0 +1,355 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import NewsletterCTA from '../components/NewsletterCTA.astro';
+
+const services = [
+  {
+    icon: "🎯",
+    title: "Strategic Development",
+    description: "Comprehensive support for product strategy, market validation, and business model development.",
+    features: [
+      "Product Strategy & Roadmap",
+      "Market Validation",
+      "Business Model Design",
+      "Growth Planning"
+    ]
+  },
+  {
+    icon: "💡",
+    title: "Product Development",
+    description: "End-to-end support for building and launching successful products.",
+    features: [
+      "MVP Development",
+      "Technical Architecture",
+      "Development Support",
+      "Quality Assurance"
+    ]
+  },
+  {
+    icon: "🚀",
+    title: "Go-to-Market",
+    description: "Comprehensive support for successful market entry and customer acquisition.",
+    features: [
+      "Market Strategy",
+      "Customer Acquisition",
+      "Sales & Marketing",
+      "Partnership Development"
+    ]
+  },
+  {
+    icon: "🌐",
+    title: "Network & Resources",
+    description: "Access to our extensive network and resources for accelerated growth.",
+    features: [
+      "Industry Connections",
+      "Strategic Partners",
+      "Talent Network",
+      "Growth Resources"
+    ]
+  },
+  {
+    icon: "💰",
+    title: "Funding Support",
+    description: "Strategic guidance and support for fundraising and financial planning.",
+    features: [
+      "Fundraising Strategy",
+      "Investor Relations",
+      "Financial Planning",
+      "Capital Structure"
+    ]
+  },
+  {
+    icon: "📈",
+    title: "Scale & Growth",
+    description: "Comprehensive support for scaling operations and achieving sustainable growth.",
+    features: [
+      "Growth Strategy",
+      "Operations Scaling",
+      "Team Building",
+      "International Expansion"
+    ]
+  }
+];
+
+const capabilities = [
+  {
+    icon: "🎯",
+    title: "Company Building",
+    description: "Hands-on support in building successful companies from inception to scale."
+  },
+  {
+    icon: "💡",
+    title: "Product Strategy",
+    description: "Expert guidance in product development, market fit, and scaling."
+  },
+  {
+    icon: "🌐",
+    title: "Market Access",
+    description: "Access to key markets, customers, and strategic partners."
+  },
+  {
+    icon: "🤝",
+    title: "Strategic Network",
+    description: "Extensive network of industry leaders, experts, and potential customers."
+  },
+  {
+    icon: "💰",
+    title: "Investment Support",
+    description: "Strategic guidance and support for fundraising and financial planning."
+  },
+  {
+    icon: "📈",
+    title: "Growth Expertise",
+    description: "Proven track record in scaling companies and achieving successful exits."
+  }
+];
+---
+
+<Layout title="Studio - Meta3Ventures">
+  <PageHero
+    title="Meta3Ventures Studio"
+    subtitle="Building Successful Companies from Day One"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <section class="capabilities-section">
+    <div class="section-content">
+      <h2 class="section-title">Building Success Together</h2>
+      <p class="section-subtitle">We work closely with founders to build and scale successful ventures, providing comprehensive support at every stage of the journey.</p>
+      
+      <div class="capabilities-grid">
+        {capabilities.map(capability => (
+          <div class="capability-card">
+            <div class="capability-icon">{capability.icon}</div>
+            <h3>{capability.title}</h3>
+            <p>{capability.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <div class="section-content">
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-subtitle">Comprehensive support across all aspects of company building and growth</p>
+      <div class="services-grid">
+        {services.map(service => (
+          <div class="service-card">
+            <div class="service-icon">{service.icon}</div>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <ul class="features-list">
+              {service.features.map(feature => (
+                <li>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-content">
+      <h2>Ready to Build Something Great?</h2>
+      <p>Join our portfolio of innovative companies shaping the future of technology</p>
+      <div class="cta-buttons">
+        <a href="/apply" class="primary-button">Apply for Partnership</a>
+        <a href="/contact" class="secondary-button">Schedule a Call</a>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterCTA
+    title="Stay Updated"
+    subtitle="Subscribe to our newsletter for the latest insights and opportunities"
+    buttonText="Subscribe Now"
+    pattern="grid"
+  />
+</Layout>
+
+<style>
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .capability-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .capability-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .capability-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .capability-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .capability-card p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .service-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .features-list li {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .features-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

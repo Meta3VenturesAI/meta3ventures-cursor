@@ -1,0 +1,316 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsGrid from '../components/StatsGrid.astro';
+
+const teamMember = {
+  name: "Liron Langer",
+  title: "Managing Director",
+  bio: `Liron Langer serves as the Managing Director of Meta3Ventures, where he leverages his extensive experience in venture capital, entrepreneurship, and company management to drive innovation and transformative growth in the AI and Web3 industries. With a deep understanding of generative AI, Web3, and a broad spectrum of technologies, Liron leads Meta3Ventures in its mission to empower the next generation of AI-driven companies.
+
+Liron is a seasoned serial entrepreneur and investor, boasting over 25 years of experience in founding, scaling, and managing companies from inception to success across various verticals including AI, Cybersecurity, Blockchain, Retail, Media, and Fintech. Liron has a proven ability to harness cutting-edge technologies to disrupt existing markets and create new verticals, driving significant value for stakeholders.
+
+As the Chief Investment Officer at Nielsen Innovate Fund, Liron has a strong track record of early-stage investment success. He has guided numerous startups and delivered great returns to LPs. His strategic insight and hands-on approach to investment management have earned him a reputation as a forward-thinking leader in the venture capital space.
+
+Throughout his career, Liron has held multiple C-level positions in both public and private companies, where he has consistently driven innovation and growth. His leadership is marked by a commitment to building companies that not only achieve commercial success but also push the boundaries of technological advancement.`,
+  image: "/team/liron-langer.jpg",
+  contact: {
+    email: "liron@meta3ventures.com",
+    linkedin: "https://linkedin.com/in/lironlanger"
+  }
+};
+---
+
+<Layout title="About - Meta3Ventures">
+  <PageHero
+    title="Shaping the Future with AI-Driven Innovation"
+    subtitle="Building the next generation of transformative technology companies"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <section class="about-section">
+    <div class="content-container">
+      <div class="mission-content">
+        <h2>Who We Are</h2>
+        <p class="intro-text">
+          <strong>Meta3Ventures</strong> is an AI venture studio and fund at the forefront of innovation, driving transformative growth in Generative Artificial Intelligence and Web3. Our mission is to empower the next generation of AI-driven companies by providing them with the resources, expertise, and strategic guidance needed to succeed.
+        </p>
+        
+        <p class="mission-text">
+          We target early-stage AI companies with the potential to reshape industries. By investing in groundbreaking solutions that leverage generative AI and Web3, we aim to solve real-world challenges and create significant societal impact. Our portfolio companies benefit from our deep industry insights, extensive network, and financial backing, enabling them to scale rapidly and achieve ambitious objectives.
+        </p>
+
+        <p class="approach-text">
+          Beyond financial support, Meta3Ventures significantly enhances the likelihood of success by focusing on companies with proven technological advantages. We prioritize product-market fit and smart growth strategies, ensuring that our investments are well-positioned for maximal returns with minimized risks. Our approach combines rigorous analysis with flexible strategies to deliver superior outcomes within a shorter time frame.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="content-container">
+      <h2 class="section-title">Our Team</h2>
+      <p class="section-subtitle">
+        The Meta3Ventures team comprises seasoned professionals with decades of combined experience in early and later-stage investments. Our team members bring a rich background in entrepreneurship, company management, and deep technological expertise. We specialize in nurturing early-stage companies, leveraging our extensive knowledge in generative AI and Web3 to drive innovation and growth.
+      </p>
+
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-image">
+            <img src={teamMember.image} alt={teamMember.name} />
+          </div>
+          <div class="member-content">
+            <h3>{teamMember.name}</h3>
+            <h4>{teamMember.title}</h4>
+            <div class="member-bio">
+              {teamMember.bio.split('\n\n').map(paragraph => (
+                <p>{paragraph}</p>
+              ))}
+            </div>
+            <div class="member-contact">
+              <a href={`mailto:${teamMember.contact.email}`} class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                {teamMember.contact.email}
+              </a>
+              <a href={teamMember.contact.linkedin} target="_blank" rel="noopener" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join-section">
+    <div class="content-container">
+      <div class="join-content">
+        <h2>Join Us</h2>
+        <p>Are you an entrepreneur with a groundbreaking idea? Are you an investor looking to support the next wave of AI innovation? Join Meta3Ventures and be a part of shaping the future of technology.</p>
+        <div class="join-buttons">
+          <a href="/apply" class="primary-button">Apply for Partnership</a>
+          <a href="/contact" class="secondary-button">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+  }
+
+  .intro-text,
+  .mission-text,
+  .approach-text {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .intro-text strong {
+    color: white;
+  }
+
+  .mission-content h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .team-grid {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .team-member {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .member-content {
+    padding: 2rem;
+  }
+
+  .member-content h3 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .member-content h4 {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .member-bio p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .member-contact {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .contact-link:hover {
+    color: var(--accent);
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .join-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.95), rgba(10, 11, 30, 0.95)),
+                url('https://images.unsplash.com/photo-1676401835893-ec90a38a286e') center/cover;
+    text-align: center;
+  }
+
+  .join-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .join-content h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .join-content p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .join-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .team-member {
+      grid-template-columns: 1fr;
+    }
+
+    .member-image {
+      height: 400px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 4rem 1rem;
+    }
+
+    .section-title,
+    .mission-content h2,
+    .join-content h2 {
+      font-size: 2rem;
+    }
+
+    .intro-text,
+    .mission-text,
+    .approach-text {
+      font-size: 1.1rem;
+    }
+
+    .member-image {
+      height: 300px;
+    }
+
+    .join-buttons {
+      flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

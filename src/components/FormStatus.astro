@@ -1,0 +1,156 @@
+---
+interface Props {
+  type: 'success' | 'error' | 'warning';
+  message: string;
+  actions?: {
+    primary?: {
+      text: string;
+      href: string;
+    };
+    secondary?: {
+      text: string;
+      onClick: string;
+    };
+  };
+}
+
+const { type, message, actions } = Astro.props;
+---
+
+<div class={`status-message ${type}`} role="alert">
+  {type === 'success' && (
+    <svg xmlns="http://www.w3.org/2000/svg" class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  )}
+  {type === 'error' && (
+    <svg xmlns="http://www.w3.org/2000/svg" class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  )}
+  {type === 'warning' && (
+    <svg xmlns="http://www.w3.org/2000/svg" class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  )}
+  
+  <p>{message}</p>
+
+  {actions && (
+    <div class="status-actions">
+      {actions.primary && (
+        <a href={actions.primary.href} class="button primary">{actions.primary.text}</a>
+      )}
+      {actions.secondary && (
+        <button onclick={actions.secondary.onClick} class="button secondary">
+          {actions.secondary.text}
+        </button>
+      )}
+    </div>
+  )}
+</div>
+
+<style>
+  .status-message {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .success {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+  }
+
+  .error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  .warning {
+    background: rgba(234, 179, 8, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.2);
+    color: #eab308;
+  }
+
+  .status-icon {
+    width: 48px;
+    height: 48px;
+    stroke-width: 2;
+    margin-bottom: 1rem;
+  }
+
+  .status-message p {
+    margin: 0 0 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .status-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  .secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .status-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

@@ -1,0 +1,176 @@
+---
+import GenovateNavigation from '../components/GenovateNavigation.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title,
+  description = "GenovateAI - Enterprise AI Implementation Solutions"
+} = Astro.props;
+
+// Get current path for navigation
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/genovate-favicon.svg" />
+    <title>{title}</title>
+    <style>
+      /* Critical CSS to prevent flash */
+      html.dark {
+        background: rgb(10, 11, 30);
+        color: #fff;
+      }
+      body {
+        background: rgb(10, 11, 30);
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="root-container">
+      <div class="page-container">
+        <GenovateNavigation currentPath={currentPath} />
+        <main>
+          <slot />
+        </main>
+        <Footer brand="genovate" />
+      </div>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: rgb(99, 102, 241);
+    --accent-light: rgb(145, 149, 237);
+    --background: rgb(10, 11, 30);
+    --text: rgb(255, 255, 255);
+    --text-muted: rgba(255, 255, 255, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    scroll-behavior: smooth;
+  }
+
+  html.dark {
+    background: var(--background);
+    color: var(--text);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+  }
+
+  .root-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+  }
+
+  main {
+    flex: 1;
+    padding-top: 80px;
+    background: var(--background);
+    position: relative;
+    z-index: 1;
+    contain: content;
+  }
+
+  /* Prevent FOUC and white flashes */
+  html.js-loading * {
+    transition: none !important;
+  }
+
+  /* Force dark background during transitions */
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Prevent white flash during navigation */
+  html.transitioning .page-container {
+    opacity: 0;
+  }
+
+  /* Optimize performance */
+  * {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>
+
+<script>
+// Add loading class to prevent transitions during page load
+document.documentElement.classList.add('js-loading', 'dark');
+
+// Remove loading class after page has loaded
+window.addEventListener('load', () => {
+  document.documentElement.classList.remove('js-loading');
+});
+
+// Handle navigation transitions
+document.addEventListener('astro:before-preparation', () => {
+  document.documentElement.classList.add('js-loading', 'transitioning');
+});
+
+document.addEventListener('astro:after-preparation', () => {
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove('js-loading', 'transitioning');
+  });
+});
+
+// Prevent scroll during transitions
+document.addEventListener('astro:before-preparation', () => {
+  document.body.style.overflow = 'hidden';
+});
+
+document.addEventListener('astro:after-preparation', () => {
+  document.body.style.overflow = '';
+});
+</script>

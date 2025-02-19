@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+let success = false;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const company = formData.get('company');
+    const phone = formData.get('phone');
+    const message = formData.get('message');
+    const preferredTime = formData.get('preferred-time');
+
+    // Validate inputs
+    if (!name || !email || !message) {
+      throw new Error('Please fill in all required fields');
+    }
+
+    if (isSupabaseConfigured()) {
+      const { error: insertError } = await supabase
+        .from('contact_messages')
+        .insert([{ 
+          name, 
+          email, 
+          company, 
+          phone,
+          message,
+          preferred_time: preferredTime,
+          type: 'contact_genovate'
+        }]);
+
+      if (insertError) throw insertError;
+    }
+
+    success = true;
+  } catch (e) {
+    error = e instanceof Error ? e.message : 'Failed to send message. Please try again.';
+    console.error('Error:', e);
+  }
+}

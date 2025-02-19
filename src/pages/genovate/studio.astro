@@ -1,0 +1,435 @@
+---
+import GenovateLayout from '../../layouts/GenovateLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsletterCTA from '../../components/NewsletterCTA.astro';
+
+const services = [
+  {
+    icon: "🔬",
+    title: "AI Research & Development",
+    description: "Our dedicated R&D team works on developing custom AI solutions tailored to your business needs.",
+    points: [
+      "Custom Model Development",
+      "Algorithm Optimization",
+      "Performance Testing",
+      "Scalability Solutions"
+    ]
+  },
+  {
+    icon: "🛠️",
+    title: "Implementation Services",
+    description: "Expert guidance and support throughout the AI implementation process.",
+    points: [
+      "System Integration",
+      "Deployment Support",
+      "Training & Documentation",
+      "Monitoring Setup"
+    ]
+  },
+  {
+    icon: "📊",
+    title: "Data Strategy",
+    description: "Comprehensive data strategy development and implementation services.",
+    points: [
+      "Data Assessment",
+      "Architecture Design",
+      "Quality Management",
+      "Analytics Integration"
+    ]
+  }
+];
+
+const process = [
+  {
+    number: "01",
+    title: "Discovery",
+    description: "We begin with a thorough assessment of your business needs and objectives."
+  },
+  {
+    number: "02",
+    title: "Strategy",
+    description: "Develop a comprehensive implementation strategy and roadmap."
+  },
+  {
+    number: "03",
+    title: "Development",
+    description: "Custom solution development and integration with existing systems."
+  },
+  {
+    number: "04",
+    title: "Implementation",
+    description: "Careful deployment and integration of AI solutions into your workflow."
+  },
+  {
+    number: "05",
+    title: "Optimization",
+    description: "Continuous monitoring and optimization for maximum performance."
+  }
+];
+---
+
+<GenovateLayout title="Studio - GenovateAI">
+  <main>
+    <PageHero
+      title="GenovateAI Studio"
+      subtitle="Where Innovation Meets Implementation"
+      background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+      pattern="grid"
+      height="50vh"
+    />
+
+    <section class="services-section">
+      <div class="section-content">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+          {services.map(service => (
+            <div class="service-card">
+              <div class="service-icon">{service.icon}</div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <ul class="service-points">
+                {service.points.map(point => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="process-section">
+      <div class="section-content">
+        <h2 class="section-title">Our Process</h2>
+        <div class="process-grid">
+          {process.map(step => (
+            <div class="process-card">
+              <div class="step-number">{step.number}</div>
+              <div class="step-content">
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="section-content">
+        <div class="features-grid">
+          <div class="features-content">
+            <h2>Why Choose Our Studio</h2>
+            <div class="features-list">
+              <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-content">
+                  <h3>Expert Team</h3>
+                  <p>Access to our team of AI experts and implementation specialists.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-content">
+                  <h3>Rapid Implementation</h3>
+                  <p>Efficient implementation process with proven methodologies.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-content">
+                  <h3>Enterprise Security</h3>
+                  <p>Enterprise-grade security and compliance standards.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">📈</div>
+                <div class="feature-content">
+                  <h3>Scalable Solutions</h3>
+                  <p>Solutions designed to grow with your business needs.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="features-image">
+            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0" alt="AI Implementation" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="section-content">
+        <h2>Ready to Transform Your Business?</h2>
+        <p>Join our portfolio of innovative companies shaping the future of technology</p>
+        <div class="cta-buttons">
+          <a href="/contact" class="primary-button">Schedule a Demo</a>
+          <a href="/about" class="secondary-button">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <NewsletterCTA
+      title="Stay Updated on AI Implementation"
+      subtitle="Subscribe to our newsletter for the latest insights and best practices"
+      buttonText="Subscribe Now"
+      pattern="grid"
+    />
+  </main>
+</GenovateLayout>
+
+<style>
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 3rem;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .service-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .service-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .service-points li {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .service-points li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+  }
+
+  .process-section {
+    background: linear-gradient(rgba(10, 11, 30, 0.98), rgba(10, 11, 30, 0.98)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .process-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .process-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .step-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6366f1;
+    line-height: 1;
+  }
+
+  .step-content h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .step-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .features-content h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .features-list {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .feature {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .feature-content h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .feature-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .features-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.1));
+  }
+
+  .cta-section h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button {
+    background: #6366f1;
+    color: white;
+  }
+
+  .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .primary-button:hover {
+    background: #4f46e5;
+  }
+
+  .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 1024px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .features-image {
+      order: -1;
+    }
+
+    .features-image img {
+      max-height: 400px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 4rem 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .process-card {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .feature {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+  }
+</style>

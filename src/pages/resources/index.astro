@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import PostCard from '../../components/PostCard.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+// Default resources if Supabase is not configured
+const defaultResources = [
+  {
+    title: "AI Implementation Guide",
+    excerpt: "Step-by-step guide for implementing AI solutions in your organization.",
+    slug: "ai-implementation-guide",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+    category: "Guide"
+  },
+  {
+    title: "Web3 Development Kit",
+    excerpt: "Essential tools and frameworks for Web3 development.",
+    slug: "web3-development-kit",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0",
+    category: "Development"
+  },
+  {
+    title: "Robotics Integration Manual",
+    excerpt: "Comprehensive guide for robotics system integration.",
+    slug: "robotics-integration",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e",
+    category: "Integration"
+  }
+];
+
+let resources = defaultResources;
+
+if (isSupabaseConfigured()) {
+  try {
+    const { data } = await supabase!
+      .from('resources')
+      .select('*')
+      .eq('is_published', true)
+      .order('created_at', { ascending: false });
+    
+    if (data && data.length > 0) {
+      resources = data;
+    }
+  } catch (e) {
+    console.error('Error fetching resources:', e);
+  }
+}
+---
+
+<BaseLayout title="Resources - Meta3Ventures">
+  <Hero
+    title="Resources & Guides"
+    subtitle="Expert insights and tools for building the future of technology."
+  />
+
+  <section class="resources-section">
+    <div class="resources-grid">
+      {resources.map(resource => (
+        <PostCard
+          title={resource.title}
+          excerpt={resource.excerpt}
+          slug={resource.slug}
+          image={resource.image}
+          category={resource.category}
+          type="resource"
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .resources-section {
+    padding: 4rem 2rem;
+  }
+
+  .resources-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .resources-section {
+      padding: 2rem 1rem;
+    }
+
+    .resources-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

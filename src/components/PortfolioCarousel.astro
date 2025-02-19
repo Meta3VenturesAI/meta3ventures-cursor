@@ -1,0 +1,435 @@
+---
+interface Company {
+  name: string;
+  description: string;
+  category: string;
+  image: string;
+  link?: string;
+}
+
+interface Props {
+  companies: Company[];
+  showCategories?: boolean;
+}
+
+const { companies, showCategories = true } = Astro.props;
+
+// Group companies by category
+const groupedCompanies = companies.reduce((acc, company) => {
+  const category = company.category;
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(company);
+  return acc;
+}, {} as Record<string, Company[]>);
+
+const categories = Object.keys(groupedCompanies);
+---
+
+<div class="portfolio-section">
+  <div class="category-tabs">
+    <button class="category-tab active" data-category="all">All</button>
+    {categories.map(category => (
+      <button class="category-tab" data-category={category}>{category}</button>
+    ))}
+  </div>
+
+  <div class="portfolio-carousel">
+    <div class="carousel-container">
+      <div class="carousel-track">
+        {companies.map(company => (
+          <div class="carousel-item" data-category={company.category}>
+            <div class="company-card">
+              <div class="company-image" style={`background-image: url(${company.image})`}>
+                {showCategories && <span class="category-tag">{company.category}</span>}
+              </div>
+              <div class="company-content">
+                <h3>{company.name}</h3>
+                <p>{company.description}</p>
+                {company.link && (
+                  <a href={company.link} class="learn-more" target="_blank" rel="noopener">
+                    Learn More →
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    <div class="carousel-controls">
+      <button class="carousel-button prev" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="carousel-dots"></div>
+      <button class="carousel-button next" aria-label="Next">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .portfolio-section {
+    padding: 2rem 0;
+  }
+
+  .category-tabs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .category-tab {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .category-tab:hover,
+  .category-tab.active {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .portfolio-carousel {
+    position: relative;
+  }
+
+  .carousel-container {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 1rem;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 2rem;
+    transition: transform 0.5s ease;
+  }
+
+  .carousel-item {
+    min-width: calc(33.333% - 1.334rem);
+    flex: 0 0 auto;
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.3s ease;
+  }
+
+  .carousel-item.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+
+  .company-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .company-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .company-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .category-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(99, 102, 241, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+  }
+
+  .company-content {
+    padding: 1.5rem;
+  }
+
+  .company-content h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .company-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .learn-more {
+    color: #6366f1;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .learn-more:hover {
+    gap: 0.75rem;
+  }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .carousel-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .carousel-button:hover {
+    background: rgba(99, 102, 241, 0.3);
+    transform: scale(1.1);
+  }
+
+  .carousel-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .carousel-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .carousel-dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .carousel-dot.active {
+    background: #6366f1;
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 1024px) {
+    .carousel-item {
+      min-width: calc(50% - 1rem);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-item {
+      min-width: calc(100% - 1rem);
+    }
+
+    .category-tabs {
+      padding: 0 1rem;
+    }
+  }
+</style>
+
+<script>
+class Carousel {
+  private container: HTMLElement;
+  private track: HTMLElement;
+  private items: HTMLElement[];
+  private dots: HTMLElement;
+  private prevBtn: HTMLButtonElement;
+  private nextBtn: HTMLButtonElement;
+  private categoryTabs: NodeListOf<HTMLButtonElement>;
+  
+  private currentIndex: number = 0;
+  private itemWidth: number = 0;
+  private itemsPerView: number = 3;
+  private totalSlides: number = 0;
+  private currentCategory: string = 'all';
+
+  constructor(element: HTMLElement) {
+    this.container = element;
+    this.track = element.querySelector('.carousel-track') as HTMLElement;
+    this.items = Array.from(element.querySelectorAll('.carousel-item')) as HTMLElement[];
+    this.dots = element.querySelector('.carousel-dots') as HTMLElement;
+    this.prevBtn = element.querySelector('.prev') as HTMLButtonElement;
+    this.nextBtn = element.querySelector('.next') as HTMLButtonElement;
+    this.categoryTabs = document.querySelectorAll('.category-tab');
+    
+    this.init();
+  }
+
+  init() {
+    this.updateItemsPerView();
+    this.filterByCategory('all');
+    this.createDots();
+    this.updateButtons();
+    this.addEventListeners();
+    this.updateDots();
+  }
+
+  filterByCategory(category: string) {
+    this.currentCategory = category;
+    this.items.forEach(item => {
+      const itemCategory = item.dataset.category;
+      if (category === 'all' || itemCategory === category) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    const visibleItems = this.items.filter(item => !item.classList.contains('hidden'));
+    this.totalSlides = Math.ceil(visibleItems.length / this.itemsPerView);
+    this.currentIndex = 0;
+    this.goToSlide(0);
+    this.updateDots();
+  }
+
+  updateItemsPerView() {
+    const containerWidth = this.container.offsetWidth;
+    if (containerWidth < 768) {
+      this.itemsPerView = 1;
+    } else if (containerWidth < 1024) {
+      this.itemsPerView = 2;
+    } else {
+      this.itemsPerView = 3;
+    }
+    this.itemWidth = containerWidth / this.itemsPerView;
+  }
+
+  createDots() {
+    this.dots.innerHTML = '';
+    for (let i = 0; i < this.totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => this.goToSlide(i));
+      this.dots.appendChild(dot);
+    }
+  }
+
+  updateDots() {
+    const dots = this.dots.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === this.currentIndex);
+    });
+  }
+
+  updateButtons() {
+    if (this.prevBtn && this.nextBtn) {
+      this.prevBtn.disabled = this.currentIndex === 0;
+      this.nextBtn.disabled = this.currentIndex === this.totalSlides - 1;
+    }
+  }
+
+  goToSlide(index: number) {
+    this.currentIndex = Math.max(0, Math.min(index, this.totalSlides - 1));
+    const offset = -this.currentIndex * (this.itemWidth * this.itemsPerView);
+    this.track.style.transform = `translateX(${offset}px)`;
+    this.updateDots();
+    this.updateButtons();
+  }
+
+  addEventListeners() {
+    // Category tabs
+    this.categoryTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.categoryTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        this.filterByCategory(tab.dataset.category || 'all');
+      });
+    });
+
+    // Navigation buttons
+    this.prevBtn?.addEventListener('click', () => {
+      this.goToSlide(this.currentIndex - 1);
+    });
+
+    this.nextBtn?.addEventListener('click', () => {
+      this.goToSlide(this.currentIndex + 1);
+    });
+
+    // Touch events for swipe
+    let startX: number;
+    let isDragging = false;
+
+    this.track.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX;
+      isDragging = true;
+    });
+
+    this.track.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const currentX = e.touches[0].pageX;
+      const diff = startX - currentX;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0 && this.currentIndex < this.totalSlides - 1) {
+          this.goToSlide(this.currentIndex + 1);
+        } else if (diff < 0 && this.currentIndex > 0) {
+          this.goToSlide(this.currentIndex - 1);
+        }
+        isDragging = false;
+      }
+    });
+
+    this.track.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      this.updateItemsPerView();
+      this.filterByCategory(this.currentCategory);
+    });
+  }
+}
+
+// Initialize carousels
+document.querySelectorAll('.portfolio-carousel').forEach(carousel => {
+  new Carousel(carousel as HTMLElement);
+});
+</script>

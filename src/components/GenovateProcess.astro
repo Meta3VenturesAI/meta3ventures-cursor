@@ -1,0 +1,196 @@
+---
+interface ProcessStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  steps: ProcessStep[];
+  title?: string;
+  subtitle?: string;
+}
+
+const { 
+  steps,
+  title = "Our Process",
+  subtitle = "How we help you implement AI solutions"
+} = Astro.props;
+---
+
+<section class="process-section">
+  <div class="section-content">
+    <h2 class="section-title">{title}</h2>
+    {subtitle && <p class="section-subtitle">{subtitle}</p>}
+    
+    <div class="process-steps">
+      {steps.map((step, index) => (
+        <div class="process-step" data-step={index + 1}>
+          <div class="step-number">{step.number}</div>
+          <div class="step-content">
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </div>
+          {index < steps.length - 1 && <div class="step-connector"></div>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-section {
+    padding: 6rem 0;
+    background: linear-gradient(rgba(10, 11, 30, 0.98), rgba(10, 11, 30, 0.98)),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0') center/cover;
+  }
+
+  .section-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 4rem;
+    font-size: 1.2rem;
+  }
+
+  .process-steps {
+    position: relative;
+  }
+
+  .process-step {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .process-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .process-step:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: #6366f1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .step-content h3 {
+    color: white;
+    margin: 0 0 0.5rem;
+  }
+
+  .step-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .step-connector {
+    position: absolute;
+    left: 31px;
+    bottom: -2rem;
+    width: 2px;
+    height: 2rem;
+    background: #6366f1;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+
+  .process-step.visible .step-connector {
+    transform: scaleY(1);
+  }
+
+  @media (max-width: 768px) {
+    .process-section {
+      padding: 4rem 0;
+    }
+
+    .section-content {
+      padding: 0 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .process-step {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .step-number {
+      margin: 0 auto;
+    }
+
+    .step-connector {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+</style>
+
+<script>
+// Intersection Observer for process steps animation
+const processSteps = document.querySelectorAll('.process-step');
+const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const step = entry.target;
+      const delay = parseInt(step.dataset.step) * 200;
+      setTimeout(() => {
+        step.classList.add('visible');
+      }, delay);
+      observer.unobserve(step);
+    }
+  });
+}, observerOptions);
+
+processSteps.forEach(step => {
+  observer.observe(step);
+});
+</script>

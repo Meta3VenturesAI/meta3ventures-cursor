@@ -1,0 +1,571 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LoadingSpinner from '../../components/LoadingSpinner.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+let isAuthenticated = false;
+let blogPosts = [];
+let error = null;
+let isLoading = true;
+
+if (isSupabaseConfigured()) {
+  try {
+    const { data: { session }, error: authError } = await supabase!.auth.getSession();
+    isAuthenticated = !!session;
+
+    if (isAuthenticated) {
+      const { data, error: postsError } = await supabase!
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (postsError) {
+        error = 'Failed to load blog posts';
+        console.error('Error fetching posts:', postsError);
+      } else {
+        blogPosts = data || [];
+      }
+    }
+  } catch (e) {
+    error = 'An unexpected error occurred';
+    console.error('Error:', e);
+  }
+}
+
+isLoading = false;
+---
+
+<Layout title="Blog Admin - Meta3Ventures">
+  <main class="page-container">
+    {!isAuthenticated ? (
+      <div class="auth-container">
+        <h1>Admin Login</h1>
+        <div id="status-message" class="status-message" style="display: none;"></div>
+        <form id="login-form" class="login-form">
+          <div class="form-group">
+            <label for="email">Admin Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              value="liron@meta3ventures.com"
+              readonly
+              class="email-input"
+            >
+          </div>
+          <div class="form-group code-input" style="display: none;">
+            <label for="code">Enter 6-Digit Code</label>
+            <input 
+              type="text" 
+              id="code" 
+              name="code"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              placeholder="Enter verification code"
+              class="code-input"
+            >
+          </div>
+          <button type="submit" class="submit-button">
+            <span class="button-text">Send Login Code</span>
+            <span class="loading-spinner"></span>
+          </button>
+        </form>
+      </div>
+    ) : (
+      <>
+        <div class="admin-header">
+          <h1>Blog Management</h1>
+          <button id="new-post-btn" class="submit-button">New Post</button>
+        </div>
+
+        {error && (
+          <div class="error-message" role="alert">
+            {error}
+          </div>
+        )}
+
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div class="posts-list">
+            {blogPosts.map(post => (
+              <div class="post-item">
+                <div class="post-info">
+                  <h3>{post.title}</h3>
+                  <p class="post-meta">
+                    {post.published_at ? (
+                      <span class="status published">Published: {new Date(post.published_at).toLocaleDateString()}</span>
+                    ) : (
+                      <span class="status draft">Draft</span>
+                    )}
+                  </p>
+                </div>
+                <div class="post-actions">
+                  <button class="edit-btn" data-id={post.id}>Edit</button>
+                  <button class="delete-btn" data-id={post.id}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <!-- Post Editor Modal -->
+        <div id="post-modal" class="modal">
+          <div class="modal-content">
+            <h2 id="modal-title">New Blog Post</h2>
+            <form id="post-form">
+              <input type="hidden" id="post-id" name="post-id">
+              <div class="form-group">
+                <label for="title">Title *</label>
+                <input type="text" id="title" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="excerpt">Excerpt *</label>
+                <textarea id="excerpt" name="excerpt" rows="3" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="content">Content *</label>
+                <textarea id="content" name="content" rows="15" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="image">Image URL</label>
+                <input type="url" id="image" name="image" placeholder="https://...">
+              </div>
+              <div class="form-group">
+                <label for="categories">Categories</label>
+                <input type="text" id="categories" name="categories" placeholder="AI, Web3, Robotics">
+                <small>Comma-separated list of categories</small>
+              </div>
+              <div class="form-group">
+                <label for="slug">Slug *</label>
+                <input 
+                  type="text" 
+                  id="slug" 
+                  name="slug" 
+                  required 
+                  pattern="[a-z0-9-]+" 
+                  title="Only lowercase letters, numbers, and hyphens"
+                >
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="publish" name="publish">
+                  <span>Publish immediately</span>
+                </label>
+              </div>
+              <div class="modal-actions">
+                <button type="button" class="cancel-button">Cancel</button>
+                <button type="submit" class="submit-button">Save Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .auth-container {
+    max-width: 500px;
+    margin: 4rem auto;
+    padding: 3rem;
+    background: rgba(var(--accent-dark), 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .auth-container h1 {
+    margin: 0 0 2rem;
+    color: rgb(var(--accent-light));
+    text-align: center;
+  }
+
+  .status-message {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .status-message.success {
+    background: rgba(0, 255, 0, 0.1);
+    color: #4caf50;
+  }
+
+  .status-message.error {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff6b6b;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .email-input,
+  .code-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(var(--accent-light), 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1rem;
+  }
+
+  .email-input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .submit-button {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    background: rgb(var(--accent));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background: rgb(var(--accent-dark));
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(var(--accent-dark), 0.1);
+    border-radius: 8px;
+  }
+
+  .post-info h3 {
+    margin: 0;
+    color: rgb(var(--accent-light));
+  }
+
+  .post-meta {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+  }
+
+  .status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  .published {
+    background: rgba(0, 255, 0, 0.1);
+    color: #4caf50;
+  }
+
+  .draft {
+    background: rgba(255, 255, 0, 0.1);
+    color: #ffd700;
+  }
+
+  .post-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .edit-btn {
+    background: rgb(var(--accent));
+    color: white;
+  }
+
+  .delete-btn {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff6b6b;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    position: relative;
+    background: #0a0b1e;
+    margin: 2rem auto;
+    padding: 2rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 900px;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .cancel-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .cancel-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+</style>
+
+<script>
+// Initialize Supabase client
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Supabase environment variables are missing');
+}
+
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Login form handling
+const loginForm = document.getElementById('login-form');
+const statusMessage = document.getElementById('status-message');
+const codeInput = document.querySelector('.code-input');
+const submitBtn = loginForm?.querySelector('.submit-button');
+const buttonText = submitBtn?.querySelector('.button-text');
+const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+
+let isCodeSent = false;
+
+function showStatus(message, type = 'success') {
+  if (statusMessage) {
+    statusMessage.textContent = message;
+    statusMessage.className = `status-message ${type}`;
+    statusMessage.style.display = 'block';
+  }
+}
+
+loginForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  if (submitBtn && buttonText && loadingSpinner) {
+    submitBtn.disabled = true;
+    buttonText.style.visibility = 'hidden';
+    loadingSpinner.style.display = 'block';
+  }
+
+  const email = document.getElementById('email').value;
+  const code = document.getElementById('code')?.value;
+
+  try {
+    if (!isCodeSent) {
+      // Send magic link
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin + '/blog/admin'
+        }
+      });
+
+      if (error) throw error;
+
+      isCodeSent = true;
+      codeInput.style.display = 'block';
+      buttonText.textContent = 'Verify Code';
+      showStatus('Verification code sent! Please check your email.');
+    } else {
+      // Verify code
+      const { error } = await supabase.auth.verifyOtp({
+        email,
+        token: code,
+        type: 'email'
+      });
+
+      if (error) throw error;
+
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error('Auth error:', error);
+    showStatus(error.message || 'Authentication failed', 'error');
+  } finally {
+    if (submitBtn && buttonText && loadingSpinner) {
+      submitBtn.disabled = false;
+      buttonText.style.visibility = 'visible';
+      loadingSpinner.style.display = 'none';
+    }
+  }
+});
+
+// Post management
+const postModal = document.getElementById('post-modal');
+const postForm = document.getElementById('post-form');
+const newPostBtn = document.getElementById('new-post-btn');
+const cancelBtns = document.querySelectorAll('.cancel-button');
+
+// Handle new post button
+newPostBtn?.addEventListener('click', () => {
+  postForm.reset();
+  document.getElementById('post-id').value = '';
+  document.getElementById('modal-title').textContent = 'New Blog Post';
+  postModal.style.display = 'block';
+});
+
+// Handle modal close
+cancelBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    postModal.style.display = 'none';
+  });
+});
+
+// Handle post form submission
+postForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const postId = formData.get('post-id');
+  
+  const categories = formData.get('categories')
+    ? formData.get('categories').split(',').map(c => c.trim())
+    : [];
+  
+  const postData = {
+    title: formData.get('title'),
+    excerpt: formData.get('excerpt'),
+    content: formData.get('content'),
+    image: formData.get('image') || null,
+    categories,
+    slug: formData.get('slug'),
+    published_at: formData.get('publish') ? new Date().toISOString() : null
+  };
+
+  try {
+    const { error } = postId
+      ? await supabase.from('blog_posts').update(postData).eq('id', postId)
+      : await supabase.from('blog_posts').insert(postData);
+
+    if (error) throw error;
+    
+    postModal.style.display = 'none';
+    window.location.reload();
+  } catch (error) {
+    console.error('Error saving post:', error);
+    alert('Failed to save post. Please try again.');
+  }
+});
+
+// Handle post deletion
+document.querySelectorAll('.delete-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+    
+    const postId = btn.dataset.id;
+    try {
+      const { error } = await supabase.from('blog_posts').delete().eq('id', postId);
+      if (error) throw error;
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post. Please try again.');
+    }
+  });
+});
+
+// Handle post editing
+document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const postId = btn.dataset.id;
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', postId)
+        .single();
+      
+      if (error) throw error;
+      
+      document.getElementById('post-id').value = data.id;
+      document.getElementById('title').value = data.title;
+      document.getElementById('excerpt').value = data.excerpt;
+      document.getElementById('content').value = data.content;
+      document.getElementById('image').value = data.image || '';
+      document.getElementById('categories').value = (data.categories || []).join(', ');
+      document.getElementById('slug').value = data.slug;
+      document.getElementById('publish').checked = !!data.published_at;
+      
+      document.getElementById('modal-title').textContent = 'Edit Blog Post';
+      postModal.style.display = 'block';
+    } catch (error) {
+      console.error('Error loading post:', error);
+      alert('Failed to load post. Please try again.');
+    }
+  });
+});
+</script>

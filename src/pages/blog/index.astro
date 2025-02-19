@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import PostCard from '../../components/PostCard.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+
+// Get search params
+const { searchParams } = Astro.url;
+const searchQuery = searchParams.get('search');
+const categoryFilter = searchParams.get('category');
+
+// Default blog posts if Supabase is not configured
+const defaultPosts = [
+  {
+    title: "The Future of AI in Business",
+    excerpt: "Exploring how AI is transforming business operations and decision-making.",
+    slug: "future-of-ai-business",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+    published_at: new Date().toISOString(),
+    category: "AI"
+  },
+  {
+    title: "Web3 Development Guide",
+    excerpt: "A comprehensive guide to building decentralized applications.",
+    slug: "web3-development-guide",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0",
+    published_at: new Date().toISOString(),
+    category: "Web3"
+  },
+  {
+    title: "Robotics Integration",
+    excerpt: "Best practices for integrating robotics in your workflow.",
+    slug: "robotics-integration",
+    image: "https://images.unsplash.com/photo-1676401835893-ec90a38a286e",
+    published_at: new Date().toISOString(),
+    category: "Robotics"
+  }
+];
+
+let posts = defaultPosts;
+let categories = new Set(defaultPosts.map(post => post.category));
+
+if (isSupabaseConfigured()) {
+  try {
+    let query = supabase!
+      .from('blog_posts')
+      .select('*')
+      .not('published_at', 'is', null)
+      .order('published_at', { ascending: false });
+    
+    if (searchQuery) {
+      query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%,excerpt.ilike.%${searchQuery}%`);
+    }
+    
+    if (categoryFilter) {
+      query = query.eq('category', categoryFilter);
+    }
+    
+    const { data } = await query;
+    
+    if (data && data.length > 0) {
+      posts = data;
+      data.forEach(post => {
+        if (post.category) {
+          categories.add(post.category);
+        }
+      });
+    }
+  } catch (e) {
+    console.error('Error fetching posts:', e);
+  }
+}
+---
+
+<BaseLayout title="Blog - Meta3Ventures">
+  <Hero
+    title="Latest Insights"
+    subtitle="Stay updated with our latest thoughts on AI, Web3, and emerging technologies."
+  />
+
+  <section class="blog-section">
+    <div class="filters">
+      <SearchBar 
+        placeholder="Search articles..." 
+        value={searchQuery || ''}
+      />
+      <CategoryFilter 
+        categories={[...categories]} 
+        activeCategory={categoryFilter}
+      />
+    </div>
+
+    <div class="posts-grid">
+      {posts.map(post => (
+        <PostCard
+          title={post.title}
+          excerpt={post.excerpt}
+          slug={post.slug}
+          image={post.image}
+          date={post.published_at}
+          category={post.category}
+          type="blog"
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-section {
+    padding: 4rem 2rem;
+  }
+
+  .filters {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+  }
+
+  .posts-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .blog-section {
+      padding: 2rem 1rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

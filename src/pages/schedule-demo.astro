@@ -1,0 +1,488 @@
+---
+import GenovateLayout from '../layouts/GenovateLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import FormErrorMessage from '../components/FormErrorMessage.astro';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { validateDemoForm } from '../lib/forms';
+import { FORM_MESSAGES } from '../lib/constants';
+
+let success = false;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const validation = validateDemoForm(formData);
+
+    if (!validation.isValid) {
+      throw new Error(Object.values(validation.errors)[0]);
+    }
+
+    if (isSupabaseConfigured()) {
+      const { error: insertError } = await supabase
+        .from('contact_messages')
+        .insert([{
+          name: formData.get('name'),
+          email: formData.get('email'),
+          company: formData.get('company'),
+          phone: formData.get('phone'),
+          message: formData.get('message'),
+          preferred_date: formData.get('preferred-date'),
+          preferred_time: formData.get('preferred-time'),
+          timezone: formData.get('timezone'),
+          use_case: formData.get('use-case'),
+          type: 'demo'
+        }]);
+
+      if (insertError) throw insertError;
+    }
+
+    success = true;
+  } catch (e) {
+    error = e instanceof Error ? e.message : FORM_MESSAGES.ERROR.SUBMISSION_FAILED;
+    console.error('Error:', e);
+  }
+}
+
+const today = new Date().toISOString().split('T')[0];
+---
+
+<GenovateLayout title="Schedule a Demo - GenovateAI">
+  <PageHero
+    title="Schedule a Demo"
+    subtitle="See how GenovateAI can transform your business"
+    background="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    pattern="grid"
+    height="50vh"
+  />
+
+  <section class="demo-section">
+    <div class="section-content">
+      <div class="demo-grid">
+        <div class="demo-info">
+          <div class="info-card">
+            <h2>What to Expect</h2>
+            <div class="demo-steps">
+              <div class="demo-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h3>Initial Consultation</h3>
+                  <p>30-minute call to understand your needs and challenges</p>
+                </div>
+              </div>
+              <div class="demo-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h3>Custom Demo</h3>
+                  <p>Tailored demonstration of relevant solutions</p>
+                </div>
+              </div>
+              <div class="demo-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h3>Q&A Session</h3>
+                  <p>Detailed discussion and next steps</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-container">
+          {success ? (
+            <div class="success-message">
+              <div class="success-content">
+                <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <h2>Demo Scheduled!</h2>
+                <p>Thank you for your interest. We'll confirm your demo time shortly.</p>
+                <div class="success-actions">
+                  <a href="/" class="button primary">Return to Home</a>
+                  <button onclick="window.location.reload()" class="button secondary">Schedule Another Demo</button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <form method="POST" class="demo-form" id="demo-form">
+              {error && <FormErrorMessage message={error} />}
+              
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="name">Full Name *</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                    minlength="2"
+                    maxlength="100"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Work Email *</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    placeholder="Enter your work email"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="company">Company Name *</label>
+                  <input 
+                    type="text" 
+                    id="company" 
+                    name="company"
+                    required
+                    placeholder="Enter your company name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="use-case">Primary Use Case *</label>
+                  <select id="use-case" name="use-case" required>
+                    <option value="">Select primary use case...</option>
+                    <option value="ai-strategy">AI Strategy & Development</option>
+                    <option value="data-intelligence">Data Intelligence</option>
+                    <option value="workflow-automation">Workflow Automation</option>
+                    <option value="ai-tools">AI Tools & Agents</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="preferred-date">Preferred Date</label>
+                  <input 
+                    type="date" 
+                    id="preferred-date" 
+                    name="preferred-date"
+                    min={today}
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="preferred-time">Preferred Time</label>
+                  <select id="preferred-time" name="preferred-time">
+                    <option value="">Select preferred time...</option>
+                    <option value="morning">Morning (9AM - 12PM)</option>
+                    <option value="afternoon">Afternoon (12PM - 3PM)</option>
+                    <option value="evening">Evening (3PM - 6PM)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="timezone">Timezone</label>
+                  <select id="timezone" name="timezone">
+                    <option value="PST">Pacific Time (PST)</option>
+                    <option value="MST">Mountain Time (MST)</option>
+                    <option value="CST">Central Time (CST)</option>
+                    <option value="EST">Eastern Time (EST)</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="message">Additional Information</label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    rows="4"
+                    placeholder="Tell us about your specific needs or questions"
+                  ></textarea>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-button">
+                <span class="button-text">Schedule Demo</span>
+                <span class="loading-spinner"></span>
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</GenovateLayout>
+
+<style>
+  .demo-section {
+    padding: 4rem 0;
+  }
+
+  .section-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .info-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .demo-steps {
+    margin-top: 2rem;
+  }
+
+  .demo-step {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    color: white;
+    margin: 0 0 0.5rem;
+  }
+
+  .step-content p {
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .form-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    color: white;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .submit-button {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .success-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    width: 48px;
+    height: 48px;
+    stroke: #4ade80;
+    stroke-width: 2;
+    margin-bottom: 1rem;
+  }
+
+  .success-message h2 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .success-message p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .button.primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .button.primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  .button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .button.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .demo-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 0 1rem;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .success-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+// Form submission handling
+const form = document.getElementById('demo-form');
+const submitBtn = form?.querySelector('.submit-button');
+const buttonText = submitBtn?.querySelector('.button-text');
+const loadingSpinner = submitBtn?.querySelector('.loading-spinner');
+
+form?.addEventListener('submit', () => {
+  if (submitBtn && buttonText && loadingSpinner) {
+    submitBtn.disabled = true;
+    buttonText.style.visibility = 'hidden';
+    loadingSpinner.style.display = 'block';
+  }
+});
+
+// Date input validation
+const dateInput = document.getElementById('preferred-date');
+if (dateInput) {
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+}
+</script>
