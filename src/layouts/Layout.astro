@@ -10,6 +10,37 @@ interface Props {
 const { 
   title,
   description = "Meta3Ventures - Building the future of technology through strategic investments and active company building in AI, Web3, and Robotics."
+} = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Navigation />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title,
+  description = "Meta3Ventures - Building the future of technology through strategic investments and active company building in AI, Web3, and Robotics."
 } = Astro.props;
 ---
 

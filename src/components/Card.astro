@@ -1,5 +1,43 @@
 ---
 interface Props {
+  title: string;
+  body: string;
+  href: string;
+}
+
+const { href, title, body } = Astro.props as Props;
+---
+
+<li class="link-card">
+  <a href={href} class="card-link">
+    <h3 class="card-title">
+      {title}
+      <span class="arrow">&rarr;</span>
+    </h3>
+    <p class="card-body">
+      {body}
+    </p>
+  </a>
+</li>
+
+<style>
+  .link-card {
+    /* Add your styles here */
+  }
+  .card-link {
+    /* Add your styles here */
+  }
+  .card-title {
+    /* Add your styles here */
+  }
+  .arrow {
+    /* Add your styles here */
+  }
+  .card-body {
+    /* Add your styles here */
+  }
+</style>---
+interface Props {
 	title: string;
 	body: string;
 	href: string;

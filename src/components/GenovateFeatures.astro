@@ -18,6 +18,93 @@ const {
   columns = 3,
   showLink = true,
   theme = 'dark'
+} = Astro.props as Props;
+---
+
+<div class={`feature-grid theme-${theme} columns-${columns}`}>
+  {features.map((feature) => (
+    <div class="feature-item" key={feature.title}>
+      <div class="feature-icon">
+        <img src={feature.icon} alt={`${feature.title} icon`} />
+      </div>
+      <h3 class="feature-title">{feature.title}</h3>
+      <p class="feature-description">{feature.description}</p>
+      {showLink && feature.link && (
+        <a href={feature.link} class="feature-link">Learn more</a>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .feature-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .theme-light {
+    background-color: #fff;
+    color: #000;
+  }
+  .theme-dark {
+    background-color: #000;
+    color: #fff;
+  }
+  .feature-item {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .feature-icon img {
+    width: 48px;
+    height: 48px;
+  }
+  .feature-title {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+  }
+  .feature-description {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+  .feature-link {
+    margin-top: 0.5rem;
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+  }
+  .feature-link:hover {
+    text-decoration: underline;
+  }
+</style>---
+interface Feature {
+  icon: string;
+  title: string;
+  description: string;
+  link?: string;
+}
+
+interface Props {
+  features: Feature[];
+  columns?: 2 | 3 | 4;
+  showLink?: boolean;
+  theme?: 'light' | 'dark';
+}
+
+const { 
+  features,
+  columns = 3,
+  showLink = true,
+  theme = 'dark'
 } = Astro.props;
 ---
 

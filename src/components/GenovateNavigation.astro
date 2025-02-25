@@ -6,6 +6,36 @@ interface Props {
   currentPath: string;
 }
 
+const { currentPath } = Astro.props as Props;
+---
+
+<BaseNavigation
+  brand="genovate"
+  currentPath={currentPath}
+  navItems={GENOVATE_NAV}
+/>---
+import BaseNavigation from './BaseNavigation.astro';
+import { GENOVATE_NAV } from '../lib/navigation';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props as Props;
+---
+
+<BaseNavigation
+  brand="genovate"
+  currentPath={currentPath}
+  navItems={GENOVATE_NAV}
+/>---
+import BaseNavigation from './BaseNavigation.astro';
+import { GENOVATE_NAV } from '../lib/navigation';
+
+interface Props {
+  currentPath: string;
+}
+
 const { currentPath } = Astro.props;
 ---
 

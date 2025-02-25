@@ -1,12 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+if (!import.meta.env.PUBLIC_SUPABASE_URL || !import.meta.env.PUBLIC_SUPABASE_ANON_KEY) {
+  throw new Error('Missing Supabase environment variables');
+}
 
-// Only create the client in browser environment
-const supabase = typeof window !== 'undefined' && supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+export const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+export type { SupabaseClient } from '@supabase/supabase-js';
 
 export function isSupabaseConfigured(): boolean {
   try {
@@ -33,5 +36,3 @@ export async function checkDatabaseConnection(): Promise<boolean> {
     return false;
   }
 }
-
-export { supabase };

@@ -1,1 +1,12 @@
- 
+import { apiSpec } from '../docs/api';
+import SwaggerUI from 'swagger-ui-react';
+
+<html>
+  <head>
+    <title>API Documentation</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-react/swagger-ui.css" />
+  </head>
+  <body>
+    <SwaggerUI spec={apiSpec} />
+  </body>
+</html> 

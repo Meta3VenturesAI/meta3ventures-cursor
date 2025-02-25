@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import netlify from '@astrojs/netlify';
+import critters from 'critters';
 
 export default defineConfig({
   output: 'static',
@@ -23,6 +24,21 @@ export default defineConfig({
     },
     ssr: {
       noExternal: ['@elastic/apm-rum']
-    }
+    },
+    plugins: [
+      {
+        name: 'critters',
+        async transformIndexHtml(html) {
+          const criticalCSS = new critters({
+            preload: 'media',
+            pruneSource: true,
+            reduceInlineStyles: true,
+            mergeStylesheets: true,
+            additionalStylesheets: ['/_assets/*.css']
+          });
+          return await criticalCSS.process(html);
+        }
+      }
+    ]
   }
 });

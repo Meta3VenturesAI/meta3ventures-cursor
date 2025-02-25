@@ -1,4 +1,58 @@
 ---
+// filepath: /Users/lironlanger/Projects/project/src/components/ScrollToTop.astro
+---
+<button id="scroll-to-top" class="scroll-button" aria-label="Scroll to top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+  </svg>
+</button>
+
+<script>
+  const scrollButton = document.getElementById('scroll-to-top');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollButton?.classList.add('visible');
+    } else {
+      scrollButton?.classList.remove('visible');
+    }
+  });
+
+  scrollButton?.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+
+<style>
+  .scroll-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 0.75rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .scroll-button.visible {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .scroll-button svg {
+    width: 24px;
+    height: 24px;
+  }
+</style>---
 ---
 <button id="scroll-to-top" class="scroll-button" aria-label="Scroll to top">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">

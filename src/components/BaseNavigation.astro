@@ -1,306 +1,411 @@
 ---
 import { BRAND_SWITCH, NAV_CTA } from '../lib/navigation';
 
+interface NavItem {
+  text: string;
+  href: string;
+}
+
 interface Props {
   brand: 'meta3' | 'genovate';
   currentPath: string;
-  navItems: readonly { text: string; href: string; }[];
+  navItems: readonly NavItem[];
 }
 
-const { brand, currentPath, navItems } = Astro.props;
+const { brand, currentPath, navItems } = Astro.props as Props;
 const switchTo = BRAND_SWITCH[brand];
 const cta = NAV_CTA[brand];
 ---
 
 <div class="nav-wrapper">
-  <nav class="nav-container">
+  <nav class="nav-container" aria-label="Main Navigation">
     <div class="nav-content">
-      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo">
+      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo" aria-label={brand === 'meta3' ? 'Meta3Ventures Home' : 'GenovateAI Home'}>
         {brand === 'meta3' ? (
           <span class="logo-text">Meta3<span class="gradient-text">Ventures</span></span>
         ) : (
           <span class="logo-text">Genovate<span class="gradient-text">AI</span></span>
         )}
       </a>
-
-      <div class="nav-links">
-        {navItems.map(item => (
-          <a 
-            href={item.href} 
-            class:list={[
-              'nav-link',
-              { active: currentPath === item.href || currentPath.startsWith(`${item.href}/`) }
-            ]}
-          >
-            {item.text}
-          </a>
+      <ul class="nav-items">
+        {navItems.map((item) => (
+          <li class="nav-item" key={item.href}>
+            <a href={item.href} class={currentPath === item.href ? 'active' : ''}>
+              {item.text}
+            </a>
+          </li>
         ))}
-        <a href={switchTo.href} class="brand-switch">
-          <span class="switch-icon">{switchTo.icon}</span>
-          <span>{switchTo.text}</span>
-        </a>
-        <a href={cta.href} class="cta-button">{cta.text}</a>
-      </div>
-
-      <button class="mobile-menu-button" aria-label="Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-      </button>
-    </div>
-
-    <div class="mobile-menu">
-      {navItems.map(item => (
-        <a 
-          href={item.href} 
-          class:list={[
-            'mobile-link',
-            { active: currentPath === item.href || currentPath.startsWith(`${item.href}/`) }
-          ]}
-        >
-          {item.text}
-        </a>
-      ))}
-      <a href={switchTo.href} class="mobile-brand-switch">
-        <span class="switch-icon">{switchTo.icon}</span>
+      </ul>
+      <a href={cta.href} class="cta-button">
+        {cta.text}
+      </a>
+      <a href={switchTo.href} class="switch-brand">
         {switchTo.text}
       </a>
-      <a href={cta.href} class="mobile-cta">{cta.text}</a>
     </div>
   </nav>
 </div>
 
 <style>
   .nav-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    background: rgba(10, 11, 30, 0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    height: 80px;
-    display: flex;
-    align-items: center;
+    /* Add your styles here */
   }
-
   .nav-container {
-    width: 100%;
-    background: transparent;
+    /* Add your styles here */
   }
-
   .nav-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+    /* Add your styles here */
   }
-
   .logo {
-    text-decoration: none;
-    color: white;
+    /* Add your styles here */
   }
-
   .logo-text {
-    font-size: 1.5rem;
-    font-weight: 700;
+    /* Add your styles here */
   }
-
   .gradient-text {
-    background: linear-gradient(45deg, var(--accent), var(--accent-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    /* Add your styles here */
   }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    height: 100%;
+  .nav-items {
+    /* Add your styles here */
   }
-
-  .nav-link {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
+  .nav-item {
+    /* Add your styles here */
   }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    transform: scaleX(1);
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    color: white;
-  }
-
-  .brand-switch {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(99, 102, 241, 0.1);
-    border-radius: 8px;
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .brand-switch:hover {
-    background: rgba(99, 102, 241, 0.2);
-    transform: translateY(-1px);
-  }
-
-  .switch-icon {
-    font-size: 1.2rem;
-  }
-
   .cta-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background: var(--accent);
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    /* Add your styles here */
   }
-
-  .cta-button:hover {
-    background: var(--accent-light);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  .switch-brand {
+    /* Add your styles here */
   }
-
-  .mobile-menu-button {
-    display: none;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: white;
+  .active {
+    /* Add your styles here */
   }
+</style>---
+import { BRAND_SWITCH, NAV_CTA } from '../lib/navigation';
 
-  .mobile-menu-button svg {
-    width: 1.5rem;
-    height: 1.5rem;
+interface NavItem {
+  text: string;
+  href: string;
+}
+
+interface Props {
+  brand: 'meta3' | 'genovate';
+  currentPath: string;
+  navItems: readonly NavItem[];
+}
+
+const { brand, currentPath, navItems } = Astro.props as Props;
+const switchTo = BRAND_SWITCH[brand];
+const cta = NAV_CTA[brand];
+---
+
+<div class="nav-wrapper">
+  <nav class="nav-container" aria-label="Main Navigation">
+    <div class="nav-content">
+      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo" aria-label={brand === 'meta3' ? 'Meta3Ventures Home' : 'GenovateAI Home'}>
+        {brand === 'meta3' ? (
+          <span class="logo-text">Meta3<span class="gradient-text">Ventures</span></span>
+        ) : (
+          <span class="logo-text">Genovate<span class="gradient-text">AI</span></span>
+        )}
+      </a>
+      <ul class="nav-items">
+        {navItems.map((item) => (
+          <li class="nav-item" key={item.href}>
+            <a href={item.href} class={currentPath === item.href ? 'active' : ''}>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href={cta.href} class="cta-button">
+        {cta.text}
+      </a>
+      <a href={switchTo.href} class="switch-brand">
+        {switchTo.text}
+      </a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .nav-wrapper {
+    /* Add your styles here */
   }
-
-  .mobile-menu {
-    display: none;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: rgba(10, 11, 30, 0.95);
-    backdrop-filter: blur(8px);
-    padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  .nav-container {
+    /* Add your styles here */
   }
-
-  .mobile-menu.open {
-    display: flex;
+  .nav-content {
+    /* Add your styles here */
   }
-
-  .mobile-link {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+  .logo {
+    /* Add your styles here */
   }
-
-  .mobile-link:hover,
-  .mobile-link.active {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+  .logo-text {
+    /* Add your styles here */
   }
-
-  .mobile-brand-switch {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
+  .gradient-text {
+    /* Add your styles here */
   }
-
-  .mobile-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1rem;
-    background: var(--accent);
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    text-align: center;
-    font-weight: 500;
-    transition: all 0.3s ease;
+  .nav-items {
+    /* Add your styles here */
   }
-
-  .mobile-cta:hover {
-    background: var(--accent-light);
-    transform: translateY(-1px);
+  .nav-item {
+    /* Add your styles here */
   }
+  .cta-button {
+    /* Add your styles here */
+  }
+  .switch-brand {
+    /* Add your styles here */
+  }
+  .active {
+    /* Add your styles here */
+  }
+</style>---
+import { BRAND_SWITCH, NAV_CTA } from '../lib/navigation';
 
-  @media (max-width: 768px) {
-    .nav-content {
-      padding: 0 1rem;
-    }
+interface NavItem {
+  text: string;
+  href: string;
+}
 
-    .nav-links {
-      display: none;
-    }
+interface Props {
+  brand: 'meta3' | 'genovate';
+  currentPath: string;
+  navItems: readonly NavItem[];
+}
 
-    .mobile-menu-button {
-      display: block;
-    }
+const { brand, currentPath, navItems } = Astro.props as Props;
+const switchTo = BRAND_SWITCH[brand];
+const cta = NAV_CTA[brand];
+---
+
+<div class="nav-wrapper">
+  <nav class="nav-container" aria-label="Main Navigation">
+    <div class="nav-content">
+      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo" aria-label={brand === 'meta3' ? 'Meta3Ventures Home' : 'GenovateAI Home'}>
+        {brand === 'meta3' ? (
+          <span class="logo-text">Meta3<span class="gradient-text">Ventures</span></span>
+        ) : (
+          <span class="logo-text">Genovate<span class="gradient-text">AI</span></span>
+        )}
+      </a>
+      <ul class="nav-items">
+        {navItems.map((item) => (
+          <li class="nav-item" key={item.href}>
+            <a href={item.href} class={currentPath === item.href ? 'active' : ''}>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href={cta.href} class="cta-button">
+        {cta.text}
+      </a>
+      <a href={switchTo.href} class="switch-brand">
+        {switchTo.text}
+      </a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .nav-wrapper {
+    /* Add your styles here */
+  }
+  .nav-container {
+    /* Add your styles here */
+  }
+  .nav-content {
+    /* Add your styles here */
+  }
+  .logo {
+    /* Add your styles here */
+  }
+  .logo-text {
+    /* Add your styles here */
+  }
+  .gradient-text {
+    /* Add your styles here */
+  }
+  .nav-items {
+    /* Add your styles here */
+  }
+  .nav-item {
+    /* Add your styles here */
+  }
+  .cta-button {
+    /* Add your styles here */
+  }
+  .switch-brand {
+    /* Add your styles here */
+  }
+  .active {
+    /* Add your styles here */
+  }
+</style>---
+import { BRAND_SWITCH, NAV_CTA } from '../lib/navigation';
+
+interface NavItem {
+  text: string;
+  href: string;
+}
+
+interface Props {
+  brand: 'meta3' | 'genovate';
+  currentPath: string;
+  navItems: readonly NavItem[];
+}
+
+const { brand, currentPath, navItems } = Astro.props as Props;
+const switchTo = BRAND_SWITCH[brand];
+const cta = NAV_CTA[brand];
+---
+
+<div class="nav-wrapper">
+  <nav class="nav-container" aria-label="Main Navigation">
+    <div class="nav-content">
+      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo" aria-label={brand === 'meta3' ? 'Meta3Ventures Home' : 'GenovateAI Home'}>
+        {brand === 'meta3' ? (
+          <span class="logo-text">Meta3<span class="gradient-text">Ventures</span></span>
+        ) : (
+          <span class="logo-text">Genovate<span class="gradient-text">AI</span></span>
+        )}
+      </a>
+      <ul class="nav-items">
+        {navItems.map((item) => (
+          <li class="nav-item" key={item.href}>
+            <a href={item.href} class={currentPath === item.href ? 'active' : ''} aria-current={currentPath === item.href ? 'page' : undefined}>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href={cta.href} class="cta-button">
+        {cta.text}
+      </a>
+      <a href={switchTo.href} class="switch-brand">
+        {switchTo.text}
+      </a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .nav-wrapper {
+    /* Add your styles here */
+  }
+  .nav-container {
+    /* Add your styles here */
+  }
+  .nav-content {
+    /* Add your styles here */
+  }
+  .logo {
+    /* Add your styles here */
+  }
+  .logo-text {
+    /* Add your styles here */
+  }
+  .gradient-text {
+    /* Add your styles here */
+  }
+  .nav-items {
+    /* Add your styles here */
+  }
+  .nav-item {
+    /* Add your styles here */
+  }
+  .cta-button {
+    /* Add your styles here */
+  }
+  .switch-brand {
+    /* Add your styles here */
+  }
+  .active {
+    /* Add your styles here */
+  }
+</style>---
+import { BRAND_SWITCH, NAV_CTA } from '../lib/navigation';
+
+interface NavItem {
+  text: string;
+  href: string;
+}
+
+interface Props {
+  brand: 'meta3' | 'genovate';
+  currentPath: string;
+  navItems: readonly NavItem[];
+}
+
+const { brand, currentPath, navItems } = Astro.props as Props;
+const switchTo = BRAND_SWITCH[brand];
+const cta = NAV_CTA[brand];
+---
+
+<div class="nav-wrapper">
+  <nav class="nav-container" aria-label="Main Navigation">
+    <div class="nav-content">
+      <a href={brand === 'meta3' ? '/' : '/genovate'} class="logo" aria-label={brand === 'meta3' ? 'Meta3Ventures Home' : 'GenovateAI Home'}>
+        {brand === 'meta3' ? (
+          <span class="logo-text">Meta3<span class="gradient-text">Ventures</span></span>
+        ) : (
+          <span class="logo-text">Genovate<span class="gradient-text">AI</span></span>
+        )}
+      </a>
+      <ul class="nav-items">
+        {navItems.map((item) => (
+          <li class="nav-item" key={item.href}>
+            <a href={item.href} class={currentPath === item.href ? 'active' : ''} aria-current={currentPath === item.href ? 'page' : undefined}>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href={cta.href} class="cta-button">
+        {cta.text}
+      </a>
+      <a href={switchTo.href} class="switch-brand">
+        {switchTo.text}
+      </a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .nav-wrapper {
+    /* Add your styles here */
+  }
+  .nav-container {
+    /* Add your styles here */
+  }
+  .nav-content {
+    /* Add your styles here */
+  }
+  .logo {
+    /* Add your styles here */
+  }
+  .logo-text {
+    /* Add your styles here */
+  }
+  .gradient-text {
+    /* Add your styles here */
+  }
+  .nav-items {
+    /* Add your styles here */
+  }
+  .nav-item {
+    /* Add your styles here */
+  }
+  .cta-button {
+    /* Add your styles here */
+  }
+  .switch-brand {
+    /* Add your styles here */
+  }
+  .active {
+    /* Add your styles here */
   }
 </style>
-
-<script>
-  const mobileMenuButton = document.querySelector('.mobile-menu-button');
-  const mobileMenu = document.querySelector('.mobile-menu');
-
-  mobileMenuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('open');
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!mobileMenu?.contains(e.target as Node) && 
-        !mobileMenuButton?.contains(e.target as Node) && 
-        mobileMenu?.classList.contains('open')) {
-      mobileMenu.classList.remove('open');
-    }
-  });
-</script>

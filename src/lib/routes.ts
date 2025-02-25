@@ -1,29 +1,40 @@
-```typescript
-// Define route constants
-export const META3_ROUTES = {
-  HOME: '/',
-  ABOUT: '/about',
-  PORTFOLIO: '/portfolio', 
-  STUDIO: '/studio',
-  RESOURCES: '/resources',
-  BLOG: '/blog',
-  CONTACT: '/contact',
-  APPLY: '/apply'
-} as const;
+import type { Route, Brand } from './navigation/types';
 
-export const GENOVATE_ROUTES = {
-  HOME: '/genovate',
-  ABOUT: '/genovate/about',
-  SERVICES: '/genovate/services',
-  STUDIO: '/genovate/studio',
-  RESOURCES: '/genovate/resources',
-  BLOG: '/genovate/blog',
-  CONTACT: '/genovate/contact',
-  DEMO: '/schedule-demo'
-} as const;
+const routes: Record<Brand, Route[]> = {
+  meta3: [
+    { path: '/', name: 'Home', component: 'Home' },
+    { path: '/about', name: 'About', component: 'About' },
+    { path: '/portfolio', name: 'Portfolio', component: 'Portfolio' },
+    { path: '/studio', name: 'Studio', component: 'Studio' },
+    { path: '/resources', name: 'Resources', component: 'Resources' },
+    { path: '/blog', name: 'Blog', component: 'Blog' },
+    { path: '/contact', name: 'Contact', component: 'Contact' }
+  ],
+  genovate: [
+    { path: '/', name: 'Home', component: 'Home' },
+    { path: '/about', name: 'About', component: 'About' },
+    { path: '/services', name: 'Services', component: 'Services' },
+    { path: '/studio', name: 'Studio', component: 'Studio' },
+    { path: '/resources', name: 'Resources', component: 'Resources' },
+    { path: '/blog', name: 'Blog', component: 'Blog' },
+    { path: '/contact', name: 'Contact', component: 'Contact' }
+  ]
+};
 
-export const ROUTES = {
-  META3: META3_ROUTES,
-  GENOVATE: GENOVATE_ROUTES
-} as const;
-```
+export function getRouteByPath(path: string, brand: Brand): Route | undefined {
+  return routes[brand].find(route => route.path === path);
+}
+
+export function getBrandRoutes(brand: Brand): Route[] {
+  return routes[brand];
+}
+
+export function isProtectedRoute(route: Route): boolean {
+  return route.meta?.requiresAuth ?? false;
+}
+
+export function getRoleRequirements(route: Route): string[] {
+  return route.meta?.roles || [];
+}
+
+export { routes };

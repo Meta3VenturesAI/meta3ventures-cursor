@@ -15,6 +15,70 @@ const {
   stats, 
   columns = 4,
   showDescription = false
+} = Astro.props as Props;
+---
+
+<div class={`stats-grid columns-${columns}`}>
+  {stats.map(stat => (
+    <div class="stat-item" key={stat.label}>
+      <div class="stat-number">{stat.number}</div>
+      <div class="stat-label">{stat.label}</div>
+      {showDescription && stat.description && (
+        <div class="stat-description">{stat.description}</div>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .stats-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-item {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .stat-label {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+  }
+  .stat-description {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+</style>---
+interface Stat {
+  number: string;
+  label: string;
+  description?: string;
+}
+
+interface Props {
+  stats: Stat[];
+  columns?: number;
+  showDescription?: boolean;
+}
+
+const { 
+  stats, 
+  columns = 4,
+  showDescription = false
 } = Astro.props;
 ---
 

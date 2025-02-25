@@ -1,4 +1,36 @@
-```astro
+---
+import { BRAND_SWITCH } from '../lib/navigation';
+
+interface Props {
+  currentBrand: 'meta3' | 'genovate';
+}
+
+const { currentBrand } = Astro.props as Props;
+const switchTo = BRAND_SWITCH[currentBrand];
+---
+
+<a 
+  href={switchTo.href} 
+  class="brand-switch" 
+  data-brand={currentBrand}
+  data-tracking="brand-switch"
+  aria-label={`Switch to ${switchTo.text}`}
+>
+  <span class="switch-icon">{switchTo.icon}</span>
+  <span class="switch-text">{switchTo.text}</span>
+</a>
+
+<style>
+  .brand-switch {
+    /* Add your styles here */
+  }
+  .switch-icon {
+    /* Add your styles here */
+  }
+  .switch-text {
+    /* Add your styles here */
+  }
+</style>```astro
 ---
 import { BRAND_SWITCH } from '../lib/navigation';
 

@@ -1,5 +1,42 @@
 ---
 ---
+
+<div class="loading-spinner" role="status" aria-live="polite">
+  <div class="spinner"></div>
+  <span class="sr-only">Loading...</span>
+</div>
+
+<style>
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(var(--accent-light), 0.3);
+    border-radius: 50%;
+    border-top-color: rgb(var(--accent));
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+</style>---
+---
 <div class="loading-spinner">
   <div class="spinner"></div>
   <span class="sr-only">Loading...</span>

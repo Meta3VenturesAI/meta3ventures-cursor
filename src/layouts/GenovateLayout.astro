@@ -1,4 +1,41 @@
 ---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getBreadcrumbs } from '../lib/navigation';
+
+interface Props {
+  title: string;
+  description?: string;
+  brand?: 'meta3' | 'genovate';
+}
+
+const { 
+  title,
+  description = "Meta3Ventures - Building the future of technology through strategic investments and active company building in AI, Web3, and Robotics.",
+  brand = 'meta3'
+} = Astro.props as Props;
+
+const breadcrumbs = getBreadcrumbs(Astro.url.pathname, brand);
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+</head>
+<body>
+  <Navigation brand={brand} />
+  <main>
+    <Breadcrumbs items={breadcrumbs} />
+    <slot />
+  </main>
+  <Footer brand={brand} />
+</body>
+</html>---
 import GenovateNavigation from '../components/GenovateNavigation.astro';
 import Footer from '../components/Footer.astro';
 

@@ -19,6 +19,100 @@ const {
   columns = 4, 
   showFeatures = true,
   showLink = true
+} = Astro.props as Props;
+---
+
+<div class={`services-grid columns-${columns}`}>
+  {services.map(service => (
+    <div class="service-item" key={service.title}>
+      <div class="service-icon">
+        <img src={service.icon} alt={`${service.title} icon`} />
+      </div>
+      <h3 class="service-title">{service.title}</h3>
+      <p class="service-description">{service.description}</p>
+      {showFeatures && service.features && (
+        <ul class="service-features">
+          {service.features.map(feature => (
+            <li key={feature}>{feature}</li>
+          ))}
+        </ul>
+      )}
+      {showLink && service.link && (
+        <a href={service.link} class="service-link">Learn more</a>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .services-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .service-item {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  .service-icon img {
+    width: 48px;
+    height: 48px;
+  }
+  .service-title {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+  }
+  .service-description {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+  .service-features {
+    margin-top: 0.5rem;
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    text-align: left;
+  }
+  .service-link {
+    margin-top: 0.5rem;
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+  }
+  .service-link:hover {
+    text-decoration: underline;
+  }
+</style>---
+interface Service {
+  icon: string;
+  title: string;
+  description: string;
+  features?: string[];
+  link?: string;
+}
+
+interface Props {
+  services: Service[];
+  columns?: number;
+  showFeatures?: boolean;
+  showLink?: boolean;
+}
+
+const { 
+  services, 
+  columns = 4, 
+  showFeatures = true,
+  showLink = true
 } = Astro.props;
 ---
 

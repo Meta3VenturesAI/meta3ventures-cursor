@@ -1,0 +1,41 @@
+import { authService } from '../lib/auth';
+import { cmsService } from '../lib/cms';
+import { analytics } from '../lib/analytics';
+
+let status = {
+  auth: false,
+  cms: false,
+  api: false
+};
+
+try {
+  const session = await authService.getSession();
+  status.auth = true;
+} catch (e) {
+  console.error('Auth check failed:', e);
+}
+
+try {
+  const contents = await cmsService.getContents();
+  status.cms = true;
+} catch (e) {
+  console.error('CMS check failed:', e);
+}
+
+try {
+  const apiResponse = await fetch('/api/v1/contents');
+  status.api = apiResponse.ok;
+} catch (e) {
+  console.error('API check failed:', e);
+}
+
+analytics.pageView('/system-check');
+
+<div>
+  <h1>System Status</h1>
+  <ul>
+    <li>Authentication: {status.auth ? '✅' : '❌'}</li>
+    <li>CMS: {status.cms ? '✅' : '❌'}</li>
+    <li>API: {status.api ? '✅' : '❌'}</li>
+  </ul>
+</div> 

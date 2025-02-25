@@ -1,6 +1,69 @@
 ---
 import { checkMigrationStatus } from '../lib/database';
 
+interface MigrationStatus {
+  isComplete: boolean;
+  error?: string;
+  pendingMigrations?: string[];
+}
+
+const status: MigrationStatus = await checkMigrationStatus();
+---
+
+{!status.isComplete && (
+  <div class="migration-status" role="alert" aria-live="assertive">
+    <div class="status-header">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg>
+      <span>Database Migration Status</span>
+    </div>
+    
+    {status.error ? (
+      <p class="error-message">{status.error}</p>
+    ) : (
+      <div class="pending-migrations">
+        <p>Pending migrations:</p>
+        <ul>
+          {status.pendingMigrations?.map(table => (
+            <li key={table}>{table}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+)}
+
+<style>
+  .migration-status {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 1rem;
+    border-radius: 0.375rem;
+  }
+  .status-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+  .error-message {
+    color: #ef4444;
+  }
+  .pending-migrations {
+    margin-top: 1rem;
+  }
+  .pending-migrations ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+</style>---
+import { checkMigrationStatus } from '../lib/database';
+
 const status = await checkMigrationStatus();
 ---
 

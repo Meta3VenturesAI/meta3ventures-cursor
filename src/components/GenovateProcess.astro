@@ -15,6 +15,76 @@ const {
   steps,
   title = "Our Process",
   subtitle = "How we help you implement AI solutions"
+} = Astro.props as Props;
+---
+
+<section class="process-section">
+  <div class="section-content">
+    <h2>{title}</h2>
+    <p>{subtitle}</p>
+    <div class="process-steps">
+      {steps.map((step) => (
+        <div class="process-step" key={step.number}>
+          <div class="step-number">{step.number}</div>
+          <h3 class="step-title">{step.title}</h3>
+          <p class="step-description">{step.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-section {
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  .section-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .process-step {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .step-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+  }
+  .step-title {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+  }
+  .step-description {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+</style>---
+interface ProcessStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  steps: ProcessStep[];
+  title?: string;
+  subtitle?: string;
+}
+
+const { 
+  steps,
+  title = "Our Process",
+  subtitle = "How we help you implement AI solutions"
 } = Astro.props;
 ---
 

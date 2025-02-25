@@ -15,6 +15,71 @@ const {
   pattern = 'grid',
   height = '50vh',
   isLanding = false
+} = Astro.props as Props;
+---
+
+<section class={`hero ${isLanding ? 'landing' : ''}`} style={`height: ${height};`}>
+  <div class="hero-background" style={`background-image: url('${background}')`}>
+    <div class={`pattern ${pattern}`}></div>
+  </div>
+  <div class="hero-content">
+    <h1>{title}</h1>
+    <p>{subtitle}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+  }
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+  .pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.2;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  .landing .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>---
+interface Props {
+  title: string;
+  subtitle: string;
+  background?: string;
+  pattern?: 'dots' | 'grid' | 'waves';
+  height?: string;
+  isLanding?: boolean;
+}
+
+const { 
+  title,
+  subtitle,
+  background = 'https://images.unsplash.com/photo-1677442136019-21780ecad995',
+  pattern = 'grid',
+  height = '50vh',
+  isLanding = false
 } = Astro.props;
 ---
 

@@ -8,6 +8,48 @@ interface Props {
   stats: Stat[];
 }
 
+const { stats } = Astro.props as Props;
+---
+
+<div class="hero-stats">
+  {stats.map(stat => (
+    <div class="stat-item" key={stat.label}>
+      <div class="stat-number">{stat.number}</div>
+      <div class="stat-label">{stat.label}</div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .hero-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+  }
+  .stat-label {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #6c757d;
+  }
+</style>---
+interface Stat {
+  number: string;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+}
+
 const { stats } = Astro.props;
 ---
 

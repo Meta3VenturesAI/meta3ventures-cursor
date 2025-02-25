@@ -1,1 +1,10 @@
- 
+import { supabase } from '../lib/supabase';
+
+// Example query
+const { data, error } = await supabase
+  .from('your_table')
+  .select('*');
+
+<div>
+  {JSON.stringify(data)}
+</div> 

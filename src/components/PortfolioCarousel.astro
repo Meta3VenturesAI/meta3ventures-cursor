@@ -12,6 +12,102 @@ interface Props {
   showCategories?: boolean;
 }
 
+const { companies, showCategories = true } = Astro.props as Props;
+
+// Group companies by category
+const groupedCompanies = companies.reduce((acc, company) => {
+  const category = company.category;
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(company);
+  return acc;
+}, {} as Record<string, Company[]>);
+---
+
+<section class="portfolio-carousel">
+  {Object.entries(groupedCompanies).map(([category, companies]) => (
+    <div class="category-group" key={category}>
+      {showCategories && <h2 class="category-title">{category}</h2>}
+      <div class="carousel">
+        {companies.map(company => (
+          <div class="carousel-item" key={company.name}>
+            <img src={company.image} alt={`${company.name} logo`} class="company-logo" />
+            <div class="company-info">
+              <h3 class="company-name">{company.name}</h3>
+              <p class="company-description">{company.description}</p>
+              {company.link && <a href={company.link} class="company-link">Learn more</a>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</section>
+
+<style>
+  .portfolio-carousel {
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  .category-group {
+    margin-bottom: 2rem;
+  }
+  .category-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+  .carousel-item {
+    flex: 0 0 auto;
+    margin: 0 0.5rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  .company-logo {
+    max-width: 100px;
+    max-height: 50px;
+    margin-bottom: 0.5rem;
+  }
+  .company-info {
+    text-align: left;
+  }
+  .company-name {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .company-description {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .company-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  .company-link:hover {
+    text-decoration: underline;
+  }
+</style>---
+interface Company {
+  name: string;
+  description: string;
+  category: string;
+  image: string;
+  link?: string;
+}
+
+interface Props {
+  companies: Company[];
+  showCategories?: boolean;
+}
+
 const { companies, showCategories = true } = Astro.props;
 
 // Group companies by category

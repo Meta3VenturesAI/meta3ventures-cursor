@@ -1,4 +1,3 @@
-```typescript
 export interface NavItem {
   text: string;
   href: string;
@@ -15,4 +14,20 @@ export interface BrandSwitch {
   text: string;
   icon: string;
 }
-```
+
+export interface Route {
+  path: string;
+  name: string;
+  component: string;
+  meta?: {
+    requiresAuth?: boolean;
+    roles?: string[];
+  };
+}
+
+export type Brand = 'meta3' | 'genovate';
+
+export interface NavigationLink {
+  text: string;
+  href: string;
+}

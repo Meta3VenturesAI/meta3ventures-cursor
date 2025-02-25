@@ -1,4 +1,88 @@
 ---
+interface Partner {
+  name: string;
+  logo: string;
+}
+
+interface Props {
+  partners: Partner[];
+}
+
+const { partners } = Astro.props as Props;
+---
+
+<section class="partners-section">
+  <div class="section-content">
+    <h2 class="section-title">Trusted By Industry Leaders</h2>
+    <p class="section-subtitle">Partnering with leading organizations to drive AI innovation</p>
+    
+    <div class="carousel-container">
+      <button class="carousel-button prev" aria-label="Previous partners">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="carousel">
+        {partners.map(partner => (
+          <div class="carousel-item" key={partner.name}>
+            <img src={partner.logo} alt={`${partner.name} logo`} class="partner-logo" />
+          </div>
+        ))}
+      </div>
+      <button class="carousel-button next" aria-label="Next partners">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .partners-section {
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  .section-content {
+    text-align: center;
+  }
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .section-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+  .carousel-item {
+    flex: 0 0 auto;
+    margin: 0 0.5rem;
+  }
+  .partner-logo {
+    max-width: 100px;
+    max-height: 50px;
+  }
+  .carousel-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  .carousel-button svg {
+    width: 24px;
+    height: 24px;
+  }
+</style>---
 interface Props {
   partners: {
     name: string;

@@ -2,6 +2,90 @@
 import { META3_FOOTER_NAV, GENOVATE_FOOTER_NAV } from '../lib/navigation';
 import { META3, GENOVATE } from '../lib/brands';
 
+interface NavItem {
+  text: string;
+  href: string;
+}
+
+interface BrandData {
+  name: string;
+  description: string;
+}
+
+interface Props {
+  brand?: 'meta3' | 'genovate';
+}
+
+const { brand = 'meta3' } = Astro.props as Props;
+
+const brandData: BrandData = brand === 'meta3' ? META3 : GENOVATE;
+const navData: readonly NavItem[] = brand === 'meta3' ? META3_FOOTER_NAV : GENOVATE_FOOTER_NAV;
+---
+
+<footer class="footer">
+  <div class="footer-pattern"></div>
+  <div class="footer-gradient"></div>
+  
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <h3 class="brand-name">{brandData.name}</h3>
+        <p class="brand-description">{brandData.description}</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer Navigation">
+        <ul>
+          {navData.map((item) => (
+            <li key={item.href}>
+              <a href={item.href}>{item.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    /* Add your styles here */
+  }
+  .footer-pattern {
+    /* Add your styles here */
+  }
+  .footer-gradient {
+    /* Add your styles here */
+  }
+  .footer-content {
+    /* Add your styles here */
+  }
+  .footer-main {
+    /* Add your styles here */
+  }
+  .footer-brand {
+    /* Add your styles here */
+  }
+  .brand-name {
+    /* Add your styles here */
+  }
+  .brand-description {
+    /* Add your styles here */
+  }
+  .footer-nav {
+    /* Add your styles here */
+  }
+  .footer-nav ul {
+    /* Add your styles here */
+  }
+  .footer-nav li {
+    /* Add your styles here */
+  }
+  .footer-nav a {
+    /* Add your styles here */
+  }
+</style>---
+import { META3_FOOTER_NAV, GENOVATE_FOOTER_NAV } from '../lib/navigation';
+import { META3, GENOVATE } from '../lib/brands';
+
 interface Props {
   brand?: 'meta3' | 'genovate';
 }

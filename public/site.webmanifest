@@ -1,6 +1,14 @@
 {
   "name": "Meta3Ventures",
   "short_name": "Meta3",
+  "description": "Meta3Ventures is a platform for exploring and investing in the metaverse.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#6366f1",
+  "background_color": "#0a0b1e",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +21,16 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#6366f1",
-  "background_color": "#0a0b1e",
-  "display": "standalone"
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "640x480",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/screenshot2.png",
+      "sizes": "640x480",
+      "type": "image/png"
+    }
+  ]
 }

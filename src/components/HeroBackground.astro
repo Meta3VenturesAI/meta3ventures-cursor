@@ -3,6 +3,44 @@ interface Props {
   pattern?: 'dots' | 'grid' | 'waves';
 }
 
+const { pattern = 'dots' } = Astro.props as Props;
+---
+
+<div class={`hero-background ${pattern}`}>
+  <div class="pattern"></div>
+  <div class="gradient"></div>
+</div>
+
+<style>
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .pattern {
+    /* Add your styles for the pattern here */
+  }
+  .gradient {
+    /* Add your styles for the gradient here */
+  }
+  .dots {
+    /* Add your styles for the dots pattern here */
+  }
+  .grid {
+    /* Add your styles for the grid pattern here */
+  }
+  .waves {
+    /* Add your styles for the waves pattern here */
+  }
+</style>---
+interface Props {
+  pattern?: 'dots' | 'grid' | 'waves';
+}
+
 const { pattern = 'dots' } = Astro.props;
 ---
 

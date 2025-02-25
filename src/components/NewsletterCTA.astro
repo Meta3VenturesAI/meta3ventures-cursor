@@ -11,6 +11,80 @@ const {
   subtitle = "Subscribe to our newsletter for the latest insights and updates",
   buttonText = "Subscribe",
   pattern = 'grid'
+} = Astro.props as Props;
+---
+
+<section class="newsletter-section">
+  <div class="background">
+    <div class={`pattern ${pattern}`}></div>
+    <div class="gradient"></div>
+  </div>
+  <div class="content">
+    <h2>{title}</h2>
+    <p>{subtitle}</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Enter your email" aria-label="Email address" required />
+      <button type="submit" class="subscribe-button">{buttonText}</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .newsletter-section {
+    position: relative;
+    padding: 4rem 2rem;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+  .pattern {
+    opacity: 0.2;
+  }
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+  .newsletter-form {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .newsletter-form input {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.375rem;
+    width: 250px;
+  }
+  .subscribe-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+</style>---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  pattern?: 'dots' | 'grid' | 'waves';
+}
+
+const {
+  title = "Stay Updated",
+  subtitle = "Subscribe to our newsletter for the latest insights and updates",
+  buttonText = "Subscribe",
+  pattern = 'grid'
 } = Astro.props;
 ---
 

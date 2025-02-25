@@ -1,4 +1,44 @@
-{/* Update success message actions */}
+---
+interface Props {
+  successMessage: string;
+}
+
+const { successMessage } = Astro.props as Props;
+---
+
+<div class="contact-form">
+  <form>
+    <!-- Add form fields here -->
+  </form>
+  <div class="success-message" role="alert" aria-live="polite">
+    {successMessage}
+  </div>
+  <div class="success-actions">
+    <a href="/" class="button primary">Return to Home</a>
+    <button onclick="window.location.reload()" class="button secondary">Send Another Message</button>
+  </div>
+</div>
+
+<style>
+  .contact-form {
+    /* Add your styles here */
+  }
+  .success-message {
+    /* Add your styles here */
+  }
+  .success-actions {
+    /* Add your styles here */
+  }
+  .button {
+    /* Add your styles here */
+  }
+  .primary {
+    /* Add your styles here */
+  }
+  .secondary {
+    /* Add your styles here */
+  }
+</style>{/* Update success message actions */}
 <div class="success-actions">
   <a href="/" class="button primary">Return to Home</a>
   <button onclick="window.location.reload()" class="button secondary">Send Another Message</button>
